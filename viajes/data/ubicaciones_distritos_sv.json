@@ -1,0 +1,1579 @@
+{
+    "fuente_nombres":  "SpocWiki/America-El_Salvador, commit d831025c9a24c6359bdc3a1dae5a676b3cf5413c",
+    "fuente_coordenadas":  "GeoNames geographical database, El Salvador export (https://download.geonames.org/export/dump/SV.zip)",
+    "licencia_coordenadas":  "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+    "ubicaciones":  [
+                        {
+                            "nombre":  "Ahuachapán",
+                            "departamento":  "Ahuachapán",
+                            "latitud":  "13.924030",
+                            "longitud":  "-89.843440"
+                        },
+                        {
+                            "nombre":  "Apaneca",
+                            "departamento":  "Ahuachapán",
+                            "latitud":  "13.860000",
+                            "longitud":  "-89.801110"
+                        },
+                        {
+                            "nombre":  "Atiquizaya",
+                            "departamento":  "Ahuachapán",
+                            "latitud":  "13.976940",
+                            "longitud":  "-89.752500"
+                        },
+                        {
+                            "nombre":  "Concepción de Ataco",
+                            "departamento":  "Ahuachapán",
+                            "latitud":  "13.870280",
+                            "longitud":  "-89.848610"
+                        },
+                        {
+                            "nombre":  "El Refugio",
+                            "departamento":  "Ahuachapán",
+                            "latitud":  "13.800000",
+                            "longitud":  "-89.966670"
+                        },
+                        {
+                            "nombre":  "Guaymango",
+                            "departamento":  "Ahuachapán",
+                            "latitud":  "13.750280",
+                            "longitud":  "-89.842220"
+                        },
+                        {
+                            "nombre":  "Jujutla",
+                            "departamento":  "Ahuachapán",
+                            "latitud":  "13.786940",
+                            "longitud":  "-89.857220"
+                        },
+                        {
+                            "nombre":  "San Francisco Menéndez",
+                            "departamento":  "Ahuachapán",
+                            "latitud":  "13.843060",
+                            "longitud":  "-90.015830"
+                        },
+                        {
+                            "nombre":  "San Lorenzo",
+                            "departamento":  "Ahuachapán",
+                            "latitud":  "14.033330",
+                            "longitud":  "-89.783330"
+                        },
+                        {
+                            "nombre":  "San Pedro Puxtla",
+                            "departamento":  "Ahuachapán",
+                            "latitud":  "13.772220",
+                            "longitud":  "-89.804170"
+                        },
+                        {
+                            "nombre":  "Tacuba",
+                            "departamento":  "Ahuachapán",
+                            "latitud":  "13.901110",
+                            "longitud":  "-89.929720"
+                        },
+                        {
+                            "nombre":  "Turín",
+                            "departamento":  "Ahuachapán",
+                            "latitud":  "13.966390",
+                            "longitud":  "-89.766110"
+                        },
+                        {
+                            "nombre":  "Cinquera",
+                            "departamento":  "Cabañas",
+                            "latitud":  "13.883330",
+                            "longitud":  "-88.966670"
+                        },
+                        {
+                            "nombre":  "Dolores",
+                            "departamento":  "Cabañas",
+                            "latitud":  "13.783330",
+                            "longitud":  "-88.566670"
+                        },
+                        {
+                            "nombre":  "Guacotecti",
+                            "departamento":  "Cabañas",
+                            "latitud":  "13.866670",
+                            "longitud":  "-88.650000"
+                        },
+                        {
+                            "nombre":  "Ilobasco",
+                            "departamento":  "Cabañas",
+                            "latitud":  "13.850000",
+                            "longitud":  "-88.850000"
+                        },
+                        {
+                            "nombre":  "Jutiapa",
+                            "departamento":  "Cabañas",
+                            "latitud":  "13.883330",
+                            "longitud":  "-88.900000"
+                        },
+                        {
+                            "nombre":  "San Isidro",
+                            "departamento":  "Cabañas",
+                            "latitud":  "13.833330",
+                            "longitud":  "-88.716670"
+                        },
+                        {
+                            "nombre":  "Sensuntepeque",
+                            "departamento":  "Cabañas",
+                            "latitud":  "13.875830",
+                            "longitud":  "-88.627270"
+                        },
+                        {
+                            "nombre":  "Tejutepeque",
+                            "departamento":  "Cabañas",
+                            "latitud":  "13.850000",
+                            "longitud":  "-88.900000"
+                        },
+                        {
+                            "nombre":  "Victoria",
+                            "departamento":  "Cabañas",
+                            "latitud":  "13.950000",
+                            "longitud":  "-88.633330"
+                        },
+                        {
+                            "nombre":  "Agua Caliente",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.183330",
+                            "longitud":  "-89.233330"
+                        },
+                        {
+                            "nombre":  "Arcatao",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.083330",
+                            "longitud":  "-88.750000"
+                        },
+                        {
+                            "nombre":  "Azacualpa",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "13.983330",
+                            "longitud":  "-88.983330"
+                        },
+                        {
+                            "nombre":  "Chalatenango",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.041380",
+                            "longitud":  "-88.939510"
+                        },
+                        {
+                            "nombre":  "Citalá",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.366670",
+                            "longitud":  "-89.216670"
+                        },
+                        {
+                            "nombre":  "Comalapa",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.133330",
+                            "longitud":  "-88.950000"
+                        },
+                        {
+                            "nombre":  "Concepción Quezaltepeque",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.083330",
+                            "longitud":  "-88.950000"
+                        },
+                        {
+                            "nombre":  "Dulce Nombre de María",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.150000",
+                            "longitud":  "-89.016670"
+                        },
+                        {
+                            "nombre":  "El Carrizal",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.183330",
+                            "longitud":  "-88.883330"
+                        },
+                        {
+                            "nombre":  "El Paraíso",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.100000",
+                            "longitud":  "-89.066670"
+                        },
+                        {
+                            "nombre":  "La Laguna",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.066670",
+                            "longitud":  "-88.883330"
+                        },
+                        {
+                            "nombre":  "La Palma",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.316670",
+                            "longitud":  "-89.166670"
+                        },
+                        {
+                            "nombre":  "La Reina",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.200000",
+                            "longitud":  "-89.150000"
+                        },
+                        {
+                            "nombre":  "Las Vueltas",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.100000",
+                            "longitud":  "-88.883330"
+                        },
+                        {
+                            "nombre":  "Nombre de Jesús",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.000000",
+                            "longitud":  "-88.733330"
+                        },
+                        {
+                            "nombre":  "Nueva Concepción",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.133330",
+                            "longitud":  "-89.300000"
+                        },
+                        {
+                            "nombre":  "Nueva Trinidad",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.066670",
+                            "longitud":  "-88.800000"
+                        },
+                        {
+                            "nombre":  "Ojos de Agua",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.133330",
+                            "longitud":  "-88.866670"
+                        },
+                        {
+                            "nombre":  "Potonico",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "13.966670",
+                            "longitud":  "-88.900000"
+                        },
+                        {
+                            "nombre":  "San Antonio Los Ranchos",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.000000",
+                            "longitud":  "-88.900000"
+                        },
+                        {
+                            "nombre":  "San Antonio de La Cruz",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.016670",
+                            "longitud":  "-88.783330"
+                        },
+                        {
+                            "nombre":  "San Fernando",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.300000",
+                            "longitud":  "-89.033330"
+                        },
+                        {
+                            "nombre":  "San Francisco Lempa",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "13.974440",
+                            "longitud":  "-89.001390"
+                        },
+                        {
+                            "nombre":  "San Francisco Morazán",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.183330",
+                            "longitud":  "-89.050000"
+                        },
+                        {
+                            "nombre":  "San Ignacio",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.333330",
+                            "longitud":  "-89.183330"
+                        },
+                        {
+                            "nombre":  "San Isidro Labrador",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.000000",
+                            "longitud":  "-88.850000"
+                        },
+                        {
+                            "nombre":  "San José Cancasque",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "13.983330",
+                            "longitud":  "-88.850000"
+                        },
+                        {
+                            "nombre":  "San José Las Flores",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.050000",
+                            "longitud":  "-88.833330"
+                        },
+                        {
+                            "nombre":  "San Luis del Carmen",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "13.966670",
+                            "longitud":  "-88.966670"
+                        },
+                        {
+                            "nombre":  "San Miguel de Mercedes",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.016670",
+                            "longitud":  "-88.933330"
+                        },
+                        {
+                            "nombre":  "San Rafael",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.133330",
+                            "longitud":  "-89.033330"
+                        },
+                        {
+                            "nombre":  "Santa Rita",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.133330",
+                            "longitud":  "-89.000000"
+                        },
+                        {
+                            "nombre":  "Tejutla",
+                            "departamento":  "Chalatenango",
+                            "latitud":  "14.166670",
+                            "longitud":  "-89.100000"
+                        },
+                        {
+                            "nombre":  "Candelaria",
+                            "departamento":  "Cuscatlán",
+                            "latitud":  "13.683330",
+                            "longitud":  "-88.983330"
+                        },
+                        {
+                            "nombre":  "Cojutepeque",
+                            "departamento":  "Cuscatlán",
+                            "latitud":  "13.719710",
+                            "longitud":  "-88.933090"
+                        },
+                        {
+                            "nombre":  "El Carmen",
+                            "departamento":  "Cuscatlán",
+                            "latitud":  "13.716670",
+                            "longitud":  "-88.900000"
+                        },
+                        {
+                            "nombre":  "El Rosario",
+                            "departamento":  "Cuscatlán",
+                            "latitud":  "13.766670",
+                            "longitud":  "-88.916670"
+                        },
+                        {
+                            "nombre":  "Monte San Juan",
+                            "departamento":  "Cuscatlán",
+                            "latitud":  "13.766670",
+                            "longitud":  "-88.950000"
+                        },
+                        {
+                            "nombre":  "Oratorio de Concepción",
+                            "departamento":  "Cuscatlán",
+                            "latitud":  "13.816390",
+                            "longitud":  "-89.059720"
+                        },
+                        {
+                            "nombre":  "San Bartolomé Perulapía",
+                            "departamento":  "Cuscatlán",
+                            "latitud":  "13.765830",
+                            "longitud":  "-89.050830"
+                        },
+                        {
+                            "nombre":  "San Cristóbal",
+                            "departamento":  "Cuscatlán",
+                            "latitud":  "13.700000",
+                            "longitud":  "-88.900000"
+                        },
+                        {
+                            "nombre":  "San José Guayabal",
+                            "departamento":  "Cuscatlán",
+                            "latitud":  "13.842220",
+                            "longitud":  "-89.096940"
+                        },
+                        {
+                            "nombre":  "San Pedro Perulapán",
+                            "departamento":  "Cuscatlán",
+                            "latitud":  "13.773330",
+                            "longitud":  "-89.038890"
+                        },
+                        {
+                            "nombre":  "San Rafael Cedros",
+                            "departamento":  "Cuscatlán",
+                            "latitud":  "13.733330",
+                            "longitud":  "-88.883330"
+                        },
+                        {
+                            "nombre":  "San Ramón",
+                            "departamento":  "Cuscatlán",
+                            "latitud":  "13.683330",
+                            "longitud":  "-88.933330"
+                        },
+                        {
+                            "nombre":  "Santa Cruz Analquito",
+                            "departamento":  "Cuscatlán",
+                            "latitud":  "13.650000",
+                            "longitud":  "-88.950000"
+                        },
+                        {
+                            "nombre":  "Santa Cruz Michapa",
+                            "departamento":  "Cuscatlán",
+                            "latitud":  "13.733330",
+                            "longitud":  "-88.966670"
+                        },
+                        {
+                            "nombre":  "Suchitoto",
+                            "departamento":  "Cuscatlán",
+                            "latitud":  "13.938060",
+                            "longitud":  "-89.027780"
+                        },
+                        {
+                            "nombre":  "Tenancingo",
+                            "departamento":  "Cuscatlán",
+                            "latitud":  "13.833330",
+                            "longitud":  "-88.983330"
+                        },
+                        {
+                            "nombre":  "Antiguo Cuscatlán",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.664920",
+                            "longitud":  "-89.253190"
+                        },
+                        {
+                            "nombre":  "Chiltiupán",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.590560",
+                            "longitud":  "-89.468890"
+                        },
+                        {
+                            "nombre":  "Ciudad Arce",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.840280",
+                            "longitud":  "-89.447220"
+                        },
+                        {
+                            "nombre":  "Colon",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.708030",
+                            "longitud":  "-89.348370"
+                        },
+                        {
+                            "nombre":  "Comasagua",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.639170",
+                            "longitud":  "-89.378330"
+                        },
+                        {
+                            "nombre":  "Huizúcar",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.589440",
+                            "longitud":  "-89.238330"
+                        },
+                        {
+                            "nombre":  "Jayaque",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.673330",
+                            "longitud":  "-89.439720"
+                        },
+                        {
+                            "nombre":  "Jicalapa",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.552780",
+                            "longitud":  "-89.506670"
+                        },
+                        {
+                            "nombre":  "La Libertad",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.488330",
+                            "longitud":  "-89.322220"
+                        },
+                        {
+                            "nombre":  "Santa Tecla",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.677410",
+                            "longitud":  "-89.283350"
+                        },
+                        {
+                            "nombre":  "Nuevo Cuscatlán",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.648610",
+                            "longitud":  "-89.265280"
+                        },
+                        {
+                            "nombre":  "San Juan Opico",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.876110",
+                            "longitud":  "-89.359720"
+                        },
+                        {
+                            "nombre":  "Quezaltepeque",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.831240",
+                            "longitud":  "-89.272210"
+                        },
+                        {
+                            "nombre":  "Sacacoyo",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.736390",
+                            "longitud":  "-89.471940"
+                        },
+                        {
+                            "nombre":  "San José Villanueva",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.578060",
+                            "longitud":  "-89.265280"
+                        },
+                        {
+                            "nombre":  "San Matías",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.886940",
+                            "longitud":  "-89.317500"
+                        },
+                        {
+                            "nombre":  "San Pablo Tacachico",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.975560",
+                            "longitud":  "-89.340000"
+                        },
+                        {
+                            "nombre":  "Talnique",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.666940",
+                            "longitud":  "-89.409170"
+                        },
+                        {
+                            "nombre":  "Tamanique",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.598330",
+                            "longitud":  "-89.420280"
+                        },
+                        {
+                            "nombre":  "Teotepeque",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.585280",
+                            "longitud":  "-89.518330"
+                        },
+                        {
+                            "nombre":  "Tepecoyo",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.700280",
+                            "longitud":  "-89.467780"
+                        },
+                        {
+                            "nombre":  "Zaragoza",
+                            "departamento":  "La Libertad",
+                            "latitud":  "13.589440",
+                            "longitud":  "-89.288890"
+                        },
+                        {
+                            "nombre":  "Cuyultitán",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.548610",
+                            "longitud":  "-89.097780"
+                        },
+                        {
+                            "nombre":  "El Rosario",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.497780",
+                            "longitud":  "-89.029720"
+                        },
+                        {
+                            "nombre":  "Jerusalén",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.650000",
+                            "longitud":  "-88.900000"
+                        },
+                        {
+                            "nombre":  "Mercedes La Ceiba",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.633330",
+                            "longitud":  "-88.900000"
+                        },
+                        {
+                            "nombre":  "Olocuilta",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.569720",
+                            "longitud":  "-89.117220"
+                        },
+                        {
+                            "nombre":  "Paraíso de Osorio",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.633330",
+                            "longitud":  "-88.966670"
+                        },
+                        {
+                            "nombre":  "San Antonio Masahuat",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.568060",
+                            "longitud":  "-89.039170"
+                        },
+                        {
+                            "nombre":  "San Emigdio",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.650000",
+                            "longitud":  "-88.983330"
+                        },
+                        {
+                            "nombre":  "San Francisco Chinameca",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.605560",
+                            "longitud":  "-89.096390"
+                        },
+                        {
+                            "nombre":  "San Juan Nonualco",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.500000",
+                            "longitud":  "-88.883330"
+                        },
+                        {
+                            "nombre":  "San Juan Talpa",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.502780",
+                            "longitud":  "-89.090830"
+                        },
+                        {
+                            "nombre":  "San Juan Tepezontes",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.613890",
+                            "longitud":  "-89.010000"
+                        },
+                        {
+                            "nombre":  "San Luis la  Herradura",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.354480",
+                            "longitud":  "-88.947030"
+                        },
+                        {
+                            "nombre":  "San Luis Talpa",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.473890",
+                            "longitud":  "-89.089170"
+                        },
+                        {
+                            "nombre":  "San Miguel Tepezontes",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.622500",
+                            "longitud":  "-89.021390"
+                        },
+                        {
+                            "nombre":  "San Pedro Masahuat",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.543610",
+                            "longitud":  "-89.038610"
+                        },
+                        {
+                            "nombre":  "San Pedro Nonualco",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.600000",
+                            "longitud":  "-88.933330"
+                        },
+                        {
+                            "nombre":  "San Rafael Obrajuelo",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.500000",
+                            "longitud":  "-88.933330"
+                        },
+                        {
+                            "nombre":  "Santa María Ostuma",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.618990",
+                            "longitud":  "-88.930870"
+                        },
+                        {
+                            "nombre":  "Santiago Nonualco",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.516670",
+                            "longitud":  "-88.950000"
+                        },
+                        {
+                            "nombre":  "Tapalhuaca",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.560280",
+                            "longitud":  "-89.080280"
+                        },
+                        {
+                            "nombre":  "Zacatecoluca",
+                            "departamento":  "La Paz",
+                            "latitud":  "13.508720",
+                            "longitud":  "-88.870170"
+                        },
+                        {
+                            "nombre":  "Anamorós",
+                            "departamento":  "La Unión",
+                            "latitud":  "13.740560",
+                            "longitud":  "-87.873610"
+                        },
+                        {
+                            "nombre":  "Bolívar",
+                            "departamento":  "La Unión",
+                            "latitud":  "13.573610",
+                            "longitud":  "-87.955830"
+                        },
+                        {
+                            "nombre":  "Concepción de Oriente",
+                            "departamento":  "La Unión",
+                            "latitud":  "13.791390",
+                            "longitud":  "-87.716670"
+                        },
+                        {
+                            "nombre":  "Conchagua",
+                            "departamento":  "La Unión",
+                            "latitud":  "13.307780",
+                            "longitud":  "-87.864720"
+                        },
+                        {
+                            "nombre":  "El Carmen",
+                            "departamento":  "La Unión",
+                            "latitud":  "13.518890",
+                            "longitud":  "-88.000000"
+                        },
+                        {
+                            "nombre":  "El Sauce",
+                            "departamento":  "La Unión",
+                            "latitud":  "13.668890",
+                            "longitud":  "-87.800560"
+                        },
+                        {
+                            "nombre":  "Intipucá",
+                            "departamento":  "La Unión",
+                            "latitud":  "13.196940",
+                            "longitud":  "-88.054440"
+                        },
+                        {
+                            "nombre":  "La Unión",
+                            "departamento":  "La Unión",
+                            "latitud":  "13.339150",
+                            "longitud":  "-87.843280"
+                        },
+                        {
+                            "nombre":  "Lislique",
+                            "departamento":  "La Unión",
+                            "latitud":  "13.801390",
+                            "longitud":  "-87.899170"
+                        },
+                        {
+                            "nombre":  "Meanguera del Golfo",
+                            "departamento":  "La Unión",
+                            "latitud":  "13.179720",
+                            "longitud":  "-87.697500"
+                        },
+                        {
+                            "nombre":  "Nueva Esparta",
+                            "departamento":  "La Unión",
+                            "latitud":  "13.783610",
+                            "longitud":  "-87.838610"
+                        },
+                        {
+                            "nombre":  "Pasaquina",
+                            "departamento":  "La Unión",
+                            "latitud":  "13.584440",
+                            "longitud":  "-87.841110"
+                        },
+                        {
+                            "nombre":  "Polorós",
+                            "departamento":  "La Unión",
+                            "latitud":  "13.810280",
+                            "longitud":  "-87.819170"
+                        },
+                        {
+                            "nombre":  "San Alejo",
+                            "departamento":  "La Unión",
+                            "latitud":  "13.431390",
+                            "longitud":  "-87.963060"
+                        },
+                        {
+                            "nombre":  "San José",
+                            "departamento":  "La Unión",
+                            "latitud":  "13.416670",
+                            "longitud":  "-87.983330"
+                        },
+                        {
+                            "nombre":  "Santa Rosa de Lima",
+                            "departamento":  "La Unión",
+                            "latitud":  "13.624720",
+                            "longitud":  "-87.893610"
+                        },
+                        {
+                            "nombre":  "Yayantique",
+                            "departamento":  "La Unión",
+                            "latitud":  "13.448610",
+                            "longitud":  "-88.022220"
+                        },
+                        {
+                            "nombre":  "Yucuaiquín",
+                            "departamento":  "La Unión",
+                            "latitud":  "13.550000",
+                            "longitud":  "-88.000000"
+                        },
+                        {
+                            "nombre":  "Arambala",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.916670",
+                            "longitud":  "-88.133330"
+                        },
+                        {
+                            "nombre":  "Cacaopera",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.766670",
+                            "longitud":  "-88.083330"
+                        },
+                        {
+                            "nombre":  "Chilanga",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.716670",
+                            "longitud":  "-88.116670"
+                        },
+                        {
+                            "nombre":  "Corinto",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.810830",
+                            "longitud":  "-87.971390"
+                        },
+                        {
+                            "nombre":  "Delicias de Concepción",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.783330",
+                            "longitud":  "-88.133330"
+                        },
+                        {
+                            "nombre":  "El Divisadero",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.600000",
+                            "longitud":  "-88.050000"
+                        },
+                        {
+                            "nombre":  "El Rosario",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.566670",
+                            "longitud":  "-88.083330"
+                        },
+                        {
+                            "nombre":  "Gualococti",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.816670",
+                            "longitud":  "-88.216670"
+                        },
+                        {
+                            "nombre":  "Guatajiagua",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.666670",
+                            "longitud":  "-88.200000"
+                        },
+                        {
+                            "nombre":  "Joateca",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.900000",
+                            "longitud":  "-88.050000"
+                        },
+                        {
+                            "nombre":  "Jocoaitique",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.900000",
+                            "longitud":  "-88.150000"
+                        },
+                        {
+                            "nombre":  "Jocoro",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.616670",
+                            "longitud":  "-88.016670"
+                        },
+                        {
+                            "nombre":  "Lolotiquillo",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.733330",
+                            "longitud":  "-88.083330"
+                        },
+                        {
+                            "nombre":  "Meanguera",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.850000",
+                            "longitud":  "-88.150000"
+                        },
+                        {
+                            "nombre":  "Osicala",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.800000",
+                            "longitud":  "-88.150000"
+                        },
+                        {
+                            "nombre":  "Perquín",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.950000",
+                            "longitud":  "-88.166670"
+                        },
+                        {
+                            "nombre":  "San Carlos",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.650000",
+                            "longitud":  "-88.100000"
+                        },
+                        {
+                            "nombre":  "San Fernando",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.966670",
+                            "longitud":  "-88.200000"
+                        },
+                        {
+                            "nombre":  "San Francisco Gotera",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.694080",
+                            "longitud":  "-88.104070"
+                        },
+                        {
+                            "nombre":  "San Isidro",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.850000",
+                            "longitud":  "-88.233330"
+                        },
+                        {
+                            "nombre":  "San Simón",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.833330",
+                            "longitud":  "-88.233330"
+                        },
+                        {
+                            "nombre":  "Sensembra",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.666670",
+                            "longitud":  "-88.166670"
+                        },
+                        {
+                            "nombre":  "Sociedad",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.700000",
+                            "longitud":  "-88.016670"
+                        },
+                        {
+                            "nombre":  "Torola",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.916670",
+                            "longitud":  "-88.233330"
+                        },
+                        {
+                            "nombre":  "Yamabal",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.666670",
+                            "longitud":  "-88.166670"
+                        },
+                        {
+                            "nombre":  "Yoloaiquín",
+                            "departamento":  "Morazán",
+                            "latitud":  "13.766670",
+                            "longitud":  "-88.150000"
+                        },
+                        {
+                            "nombre":  "Carolina",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.850000",
+                            "longitud":  "-88.300000"
+                        },
+                        {
+                            "nombre":  "Chapeltique",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.633330",
+                            "longitud":  "-88.266670"
+                        },
+                        {
+                            "nombre":  "Chinameca",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.500000",
+                            "longitud":  "-88.350000"
+                        },
+                        {
+                            "nombre":  "Chirilagua",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.220280",
+                            "longitud":  "-88.138610"
+                        },
+                        {
+                            "nombre":  "Ciudad Barrios",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.766670",
+                            "longitud":  "-88.266670"
+                        },
+                        {
+                            "nombre":  "Comacarán",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.533330",
+                            "longitud":  "-88.066670"
+                        },
+                        {
+                            "nombre":  "El Tránsito",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.350000",
+                            "longitud":  "-88.350000"
+                        },
+                        {
+                            "nombre":  "Lolotique",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.550000",
+                            "longitud":  "-88.350000"
+                        },
+                        {
+                            "nombre":  "Moncagua",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.533330",
+                            "longitud":  "-88.250000"
+                        },
+                        {
+                            "nombre":  "Nueva Guadalupe",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.533330",
+                            "longitud":  "-88.350000"
+                        },
+                        {
+                            "nombre":  "Nuevo Edén de San Juan",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.816670",
+                            "longitud":  "-88.483330"
+                        },
+                        {
+                            "nombre":  "Quelepa",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.516670",
+                            "longitud":  "-88.233330"
+                        },
+                        {
+                            "nombre":  "San Antonio",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.483330",
+                            "longitud":  "-88.366670"
+                        },
+                        {
+                            "nombre":  "San Gerardo",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.800000",
+                            "longitud":  "-88.400000"
+                        },
+                        {
+                            "nombre":  "San Jorge",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.416670",
+                            "longitud":  "-88.350000"
+                        },
+                        {
+                            "nombre":  "San Luis de la Reina",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.816670",
+                            "longitud":  "-88.350000"
+                        },
+                        {
+                            "nombre":  "San Miguel",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.482610",
+                            "longitud":  "-88.182110"
+                        },
+                        {
+                            "nombre":  "San Rafael Oriente",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.383330",
+                            "longitud":  "-88.350000"
+                        },
+                        {
+                            "nombre":  "Sesori",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.716670",
+                            "longitud":  "-88.366670"
+                        },
+                        {
+                            "nombre":  "Uluazapa",
+                            "departamento":  "San Miguel",
+                            "latitud":  "13.500000",
+                            "longitud":  "-88.066670"
+                        },
+                        {
+                            "nombre":  "Aguilares",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.957220",
+                            "longitud":  "-89.189720"
+                        },
+                        {
+                            "nombre":  "Apopa",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.807220",
+                            "longitud":  "-89.179170"
+                        },
+                        {
+                            "nombre":  "Ayutuxtepeque",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.735380",
+                            "longitud":  "-89.202210"
+                        },
+                        {
+                            "nombre":  "Cuscatancingo",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.727020",
+                            "longitud":  "-89.181610"
+                        },
+                        {
+                            "nombre":  "Delgado",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.721710",
+                            "longitud":  "-89.168740"
+                        },
+                        {
+                            "nombre":  "El Paisnal",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.973610",
+                            "longitud":  "-89.218610"
+                        },
+                        {
+                            "nombre":  "Guazapa",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.876940",
+                            "longitud":  "-89.173060"
+                        },
+                        {
+                            "nombre":  "Ilopango",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.701670",
+                            "longitud":  "-89.109440"
+                        },
+                        {
+                            "nombre":  "Mejicanos",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.723970",
+                            "longitud":  "-89.188000"
+                        },
+                        {
+                            "nombre":  "Nejapa",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.814720",
+                            "longitud":  "-89.231390"
+                        },
+                        {
+                            "nombre":  "Panchimalco",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.612780",
+                            "longitud":  "-89.180000"
+                        },
+                        {
+                            "nombre":  "Rosario de Mora",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.575280",
+                            "longitud":  "-89.208890"
+                        },
+                        {
+                            "nombre":  "San Marcos",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.661080",
+                            "longitud":  "-89.182520"
+                        },
+                        {
+                            "nombre":  "San Martín",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.741670",
+                            "longitud":  "-89.056390"
+                        },
+                        {
+                            "nombre":  "San Salvador",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.689350",
+                            "longitud":  "-89.187180"
+                        },
+                        {
+                            "nombre":  "Santiago Texacuangos",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.642780",
+                            "longitud":  "-89.118330"
+                        },
+                        {
+                            "nombre":  "Santo Tomás",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.640830",
+                            "longitud":  "-89.133330"
+                        },
+                        {
+                            "nombre":  "Soyapango",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.710240",
+                            "longitud":  "-89.139890"
+                        },
+                        {
+                            "nombre":  "Tonacatepeque",
+                            "departamento":  "San Salvador",
+                            "latitud":  "13.781110",
+                            "longitud":  "-89.118610"
+                        },
+                        {
+                            "nombre":  "Apastepeque",
+                            "departamento":  "San Vicente",
+                            "latitud":  "13.666670",
+                            "longitud":  "-88.783330"
+                        },
+                        {
+                            "nombre":  "Guadalupe",
+                            "departamento":  "San Vicente",
+                            "latitud":  "13.616670",
+                            "longitud":  "-88.883330"
+                        },
+                        {
+                            "nombre":  "San Cayetano Istepeque",
+                            "departamento":  "San Vicente",
+                            "latitud":  "13.650000",
+                            "longitud":  "-88.816670"
+                        },
+                        {
+                            "nombre":  "San Esteban Catarina",
+                            "departamento":  "San Vicente",
+                            "latitud":  "13.683330",
+                            "longitud":  "-88.783330"
+                        },
+                        {
+                            "nombre":  "San Ildefonso",
+                            "departamento":  "San Vicente",
+                            "latitud":  "13.700000",
+                            "longitud":  "-88.566670"
+                        },
+                        {
+                            "nombre":  "San Lorenzo",
+                            "departamento":  "San Vicente",
+                            "latitud":  "13.616670",
+                            "longitud":  "-88.566670"
+                        },
+                        {
+                            "nombre":  "San Sebastián",
+                            "departamento":  "San Vicente",
+                            "latitud":  "13.733330",
+                            "longitud":  "-88.833330"
+                        },
+                        {
+                            "nombre":  "San Vicente",
+                            "departamento":  "San Vicente",
+                            "latitud":  "13.641140",
+                            "longitud":  "-88.784590"
+                        },
+                        {
+                            "nombre":  "Santa Clara",
+                            "departamento":  "San Vicente",
+                            "latitud":  "13.700000",
+                            "longitud":  "-88.733330"
+                        },
+                        {
+                            "nombre":  "Santo Domingo",
+                            "departamento":  "San Vicente",
+                            "latitud":  "13.716670",
+                            "longitud":  "-88.850000"
+                        },
+                        {
+                            "nombre":  "Tecoluca",
+                            "departamento":  "San Vicente",
+                            "latitud":  "13.533330",
+                            "longitud":  "-88.783330"
+                        },
+                        {
+                            "nombre":  "Tepetitán",
+                            "departamento":  "San Vicente",
+                            "latitud":  "13.650000",
+                            "longitud":  "-88.833330"
+                        },
+                        {
+                            "nombre":  "Verapaz",
+                            "departamento":  "San Vicente",
+                            "latitud":  "13.650000",
+                            "longitud":  "-88.866670"
+                        },
+                        {
+                            "nombre":  "Candelaria de La Frontera",
+                            "departamento":  "Santa Ana",
+                            "latitud":  "14.116670",
+                            "longitud":  "-89.650000"
+                        },
+                        {
+                            "nombre":  "Chalchuapa",
+                            "departamento":  "Santa Ana",
+                            "latitud":  "13.986670",
+                            "longitud":  "-89.681110"
+                        },
+                        {
+                            "nombre":  "Coatepeque",
+                            "departamento":  "Santa Ana",
+                            "latitud":  "13.928610",
+                            "longitud":  "-89.504170"
+                        },
+                        {
+                            "nombre":  "El Congo",
+                            "departamento":  "Santa Ana",
+                            "latitud":  "13.908890",
+                            "longitud":  "-89.495830"
+                        },
+                        {
+                            "nombre":  "El Porvenir",
+                            "departamento":  "Santa Ana",
+                            "latitud":  "13.850000",
+                            "longitud":  "-89.533330"
+                        },
+                        {
+                            "nombre":  "Masahuat",
+                            "departamento":  "Santa Ana",
+                            "latitud":  "14.183330",
+                            "longitud":  "-89.433330"
+                        },
+                        {
+                            "nombre":  "Metapán",
+                            "departamento":  "Santa Ana",
+                            "latitud":  "14.333330",
+                            "longitud":  "-89.450000"
+                        },
+                        {
+                            "nombre":  "San Antonio Pajonal",
+                            "departamento":  "Santa Ana",
+                            "latitud":  "14.196670",
+                            "longitud":  "-89.581110"
+                        },
+                        {
+                            "nombre":  "San Sebastián Salitrillo",
+                            "departamento":  "Santa Ana",
+                            "latitud":  "13.969170",
+                            "longitud":  "-89.636110"
+                        },
+                        {
+                            "nombre":  "Santa Ana",
+                            "departamento":  "Santa Ana",
+                            "latitud":  "13.988270",
+                            "longitud":  "-89.556850"
+                        },
+                        {
+                            "nombre":  "Santa Rosa Guachipilín",
+                            "departamento":  "Santa Ana",
+                            "latitud":  "14.200000",
+                            "longitud":  "-89.350000"
+                        },
+                        {
+                            "nombre":  "Santiago de La Frontera",
+                            "departamento":  "Santa Ana",
+                            "latitud":  "14.183060",
+                            "longitud":  "-89.606670"
+                        },
+                        {
+                            "nombre":  "Texistepeque",
+                            "departamento":  "Santa Ana",
+                            "latitud":  "14.133330",
+                            "longitud":  "-89.500000"
+                        },
+                        {
+                            "nombre":  "Acajutla",
+                            "departamento":  "Sonsonate",
+                            "latitud":  "13.592780",
+                            "longitud":  "-89.827500"
+                        },
+                        {
+                            "nombre":  "Armenia",
+                            "departamento":  "Sonsonate",
+                            "latitud":  "13.743610",
+                            "longitud":  "-89.498890"
+                        },
+                        {
+                            "nombre":  "Caluco",
+                            "departamento":  "Sonsonate",
+                            "latitud":  "13.723610",
+                            "longitud":  "-89.662220"
+                        },
+                        {
+                            "nombre":  "Cuisnahuat",
+                            "departamento":  "Sonsonate",
+                            "latitud":  "13.636670",
+                            "longitud":  "-89.603610"
+                        },
+                        {
+                            "nombre":  "Izalco",
+                            "departamento":  "Sonsonate",
+                            "latitud":  "13.744720",
+                            "longitud":  "-89.673060"
+                        },
+                        {
+                            "nombre":  "Juayúa",
+                            "departamento":  "Sonsonate",
+                            "latitud":  "13.841390",
+                            "longitud":  "-89.745560"
+                        },
+                        {
+                            "nombre":  "Nahuizalco",
+                            "departamento":  "Sonsonate",
+                            "latitud":  "13.777500",
+                            "longitud":  "-89.736670"
+                        },
+                        {
+                            "nombre":  "Nahulingo",
+                            "departamento":  "Sonsonate",
+                            "latitud":  "13.703610",
+                            "longitud":  "-89.712780"
+                        },
+                        {
+                            "nombre":  "Salcoatitán",
+                            "departamento":  "Sonsonate",
+                            "latitud":  "13.828610",
+                            "longitud":  "-89.758330"
+                        },
+                        {
+                            "nombre":  "San Antonio del Monte",
+                            "departamento":  "Sonsonate",
+                            "latitud":  "13.716390",
+                            "longitud":  "-89.738330"
+                        },
+                        {
+                            "nombre":  "San Julián",
+                            "departamento":  "Sonsonate",
+                            "latitud":  "13.613610",
+                            "longitud":  "-89.792500"
+                        },
+                        {
+                            "nombre":  "Santa Catarina Masahuat",
+                            "departamento":  "Sonsonate",
+                            "latitud":  "13.786110",
+                            "longitud":  "-89.766110"
+                        },
+                        {
+                            "nombre":  "Santa Isabel Ishuatán",
+                            "departamento":  "Sonsonate",
+                            "latitud":  "13.610000",
+                            "longitud":  "-89.585280"
+                        },
+                        {
+                            "nombre":  "Santo Domingo de Guzmán",
+                            "departamento":  "Sonsonate",
+                            "latitud":  "13.715000",
+                            "longitud":  "-89.798330"
+                        },
+                        {
+                            "nombre":  "Sonsonate",
+                            "departamento":  "Sonsonate",
+                            "latitud":  "13.717260",
+                            "longitud":  "-89.723040"
+                        },
+                        {
+                            "nombre":  "Sonzacate",
+                            "departamento":  "Sonsonate",
+                            "latitud":  "13.734170",
+                            "longitud":  "-89.714720"
+                        },
+                        {
+                            "nombre":  "Alegría",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.500000",
+                            "longitud":  "-88.483330"
+                        },
+                        {
+                            "nombre":  "Berlín",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.500000",
+                            "longitud":  "-88.533330"
+                        },
+                        {
+                            "nombre":  "California",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.366670",
+                            "longitud":  "-88.666670"
+                        },
+                        {
+                            "nombre":  "Concepción Batres",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.350000",
+                            "longitud":  "-88.366670"
+                        },
+                        {
+                            "nombre":  "El Triunfo",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.566670",
+                            "longitud":  "-88.433330"
+                        },
+                        {
+                            "nombre":  "Ereguayquín",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.350000",
+                            "longitud":  "-88.383330"
+                        },
+                        {
+                            "nombre":  "Estanzuelas",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.650000",
+                            "longitud":  "-88.500000"
+                        },
+                        {
+                            "nombre":  "Jiquilisco",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.316670",
+                            "longitud":  "-88.583330"
+                        },
+                        {
+                            "nombre":  "Jucuapa",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.516670",
+                            "longitud":  "-88.383330"
+                        },
+                        {
+                            "nombre":  "Jucuarán",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.253890",
+                            "longitud":  "-88.247780"
+                        },
+                        {
+                            "nombre":  "Mercedes Umaña",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.566670",
+                            "longitud":  "-88.500000"
+                        },
+                        {
+                            "nombre":  "Nueva Granada",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.600000",
+                            "longitud":  "-88.450000"
+                        },
+                        {
+                            "nombre":  "Ozatlán",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.383330",
+                            "longitud":  "-88.500000"
+                        },
+                        {
+                            "nombre":  "Puerto El Triunfo",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.283330",
+                            "longitud":  "-88.550000"
+                        },
+                        {
+                            "nombre":  "San Agustín",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.433330",
+                            "longitud":  "-88.600000"
+                        },
+                        {
+                            "nombre":  "San Buenaventura",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.533330",
+                            "longitud":  "-88.383330"
+                        },
+                        {
+                            "nombre":  "San Dionisio",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.283330",
+                            "longitud":  "-88.466670"
+                        },
+                        {
+                            "nombre":  "San Francisco Javier",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.416670",
+                            "longitud":  "-88.566670"
+                        },
+                        {
+                            "nombre":  "Santa Elena",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.383330",
+                            "longitud":  "-88.416670"
+                        },
+                        {
+                            "nombre":  "Santa María",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.350000",
+                            "longitud":  "-88.433330"
+                        },
+                        {
+                            "nombre":  "Santiago de María",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.483330",
+                            "longitud":  "-88.466670"
+                        },
+                        {
+                            "nombre":  "Tecapán",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.450000",
+                            "longitud":  "-88.483330"
+                        },
+                        {
+                            "nombre":  "Usulután",
+                            "departamento":  "Usulután",
+                            "latitud":  "13.344670",
+                            "longitud":  "-88.439940"
+                        }
+                    ]
+}
