@@ -5,7 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.utils import timezone
 from django.db import transaction
-from django.db.models import Sum, Avg, Count
+from django.db.models import Q, Sum, Avg, Count
 from django.db.utils import OperationalError
 from rest_framework.exceptions import ValidationError
 from unidades.models import Unidad
@@ -18,6 +18,11 @@ from .serializers import (
     EstadoViajeSerializer, ViajeSerializer, ViajeDetalleSerializer,
     CargaSerializer, MovimientoSerializer, RecargaCombustibleSerializer,
     PrecioCombustibleSerializer, PosicionGPSSerializer, AlertaSerializer,
+)
+from usuarios.permissions import (
+    FleetRolePermission,
+    IsAdministratorOrReadOnly,
+    IsOperatorOrAdministratorForCreate,
 )
 
 def _estado_viaje_id(value):
@@ -140,6 +145,47 @@ def _validar_planificacion_viaje(viaje):
         })
 
 
+def _sincronizar_viajes_simulados():
+    ahora = timezone.now()
+    viajes_por_sincronizar = Viaje.objects.select_for_update().select_related(
+        'id_unidad',
+    ).filter(
+        Q(
+            id_estado_viaje=1,
+            fecha_programada__lte=ahora,
+            fecha_llegada_est__isnull=False,
+        )
+        | Q(
+            id_estado_viaje=2,
+            es_simulado=True,
+            fecha_llegada_est__lte=ahora,
+        )
+    ).order_by('pk')
+
+    for viaje in viajes_por_sincronizar:
+        viaje.fecha_salida = viaje.fecha_programada
+        viaje.es_simulado = True
+        campos_actualizados = [
+            'es_simulado',
+            'fecha_salida',
+        ]
+        if viaje.fecha_llegada_est <= ahora:
+            viaje.id_estado_viaje = 3
+            viaje.fecha_llegada_real = viaje.fecha_llegada_est
+            campos_actualizados.extend([
+                'id_estado_viaje',
+                'fecha_llegada_real',
+            ])
+            viaje.id_unidad.id_estado_unidad_id = 1
+        else:
+            viaje.id_estado_viaje = 2
+            campos_actualizados.append('id_estado_viaje')
+            viaje.id_unidad.id_estado_unidad_id = 2
+
+        viaje.save(update_fields=campos_actualizados)
+        viaje.id_unidad.save(update_fields=['id_estado_unidad_id'])
+
+
 def _validar_lectura_combustible(unidad, galones, requerido=True, exigir_positivo=False):
     capacidad = unidad.capacidad_tanque_gal
     if capacidad is None or capacidad <= 0:
@@ -219,36 +265,52 @@ def _asignar_cargas_a_viaje(viaje, ids_cargas):
 class UbicacionViewSet(viewsets.ModelViewSet):
     queryset = Ubicacion.objects.filter(activo=True)
     serializer_class = UbicacionSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [
+        permissions.IsAuthenticated,
+        IsOperatorOrAdministratorForCreate,
+    ]
 
 
 class ClienteViewSet(viewsets.ModelViewSet):
     queryset = Cliente.objects.all()
     serializer_class = ClienteSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsAdministratorOrReadOnly]
 
 
 class TipoCargaViewSet(viewsets.ModelViewSet):
     queryset = TipoCarga.objects.all()
     serializer_class = TipoCargaSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsAdministratorOrReadOnly]
 
 
 class EstadoViajeViewSet(viewsets.ModelViewSet):
     queryset = EstadoViaje.objects.all()
     serializer_class = EstadoViajeSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsAdministratorOrReadOnly]
 
 
 class ViajeViewSet(viewsets.ModelViewSet):
     queryset = Viaje.objects.all()
     serializer_class = ViajeSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [
+        permissions.IsAuthenticated,
+        IsOperatorOrAdministratorForCreate,
+    ]
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return ViajeDetalleSerializer
         return ViajeSerializer
+
+    @transaction.atomic
+    def list(self, request, *args, **kwargs):
+        _sincronizar_viajes_simulados()
+        return super().list(request, *args, **kwargs)
+
+    @transaction.atomic
+    def retrieve(self, request, *args, **kwargs):
+        _sincronizar_viajes_simulados()
+        return super().retrieve(request, *args, **kwargs)
 
     @transaction.atomic
     def perform_create(self, serializer):
@@ -408,7 +470,10 @@ class ViajeViewSet(viewsets.ModelViewSet):
 class CargaViewSet(viewsets.ModelViewSet):
     queryset = Carga.objects.all()
     serializer_class = CargaSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [
+        permissions.IsAuthenticated,
+        IsOperatorOrAdministratorForCreate,
+    ]
 
     @transaction.atomic
     def perform_create(self, serializer):
@@ -441,7 +506,10 @@ class CargaViewSet(viewsets.ModelViewSet):
 class MovimientoViewSet(viewsets.ModelViewSet):
     queryset = Movimiento.objects.all().order_by('-fecha_hora')
     serializer_class = MovimientoSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [
+        permissions.IsAuthenticated,
+        IsOperatorOrAdministratorForCreate,
+    ]
 
     @transaction.atomic
     def perform_create(self, serializer):
@@ -604,13 +672,15 @@ class MovimientoViewSet(viewsets.ModelViewSet):
 class PrecioCombustibleViewSet(viewsets.ModelViewSet):
     queryset = PrecioCombustible.objects.all().order_by('-vigente_desde')
     serializer_class = PrecioCombustibleSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsAdministratorOrReadOnly]
 
 
 class RecargaCombustibleViewSet(viewsets.ModelViewSet):
     queryset = RecargaCombustible.objects.all().order_by('-fecha_hora')
     serializer_class = RecargaCombustibleSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [FleetRolePermission]
+    operator_write_actions = {'create'}
+    supervisor_read_actions = {'list', 'retrieve'}
 
     @transaction.atomic
     def perform_create(self, serializer):
@@ -655,18 +725,29 @@ class RecargaCombustibleViewSet(viewsets.ModelViewSet):
                     'de la unidad. Verifica también cuánto espacio queda en el tanque.'
                 )
             })
-        nivel_tanque = datos['nivel_tanque_gal']
-        if nivel_tanque <= 0 or nivel_tanque < datos['galones']:
+        combustible_actual = unidad.combustible_actual_gal
+        if combustible_actual is not None and combustible_actual + datos['galones'] > capacidad:
+            disponible = max(capacidad - combustible_actual, 0)
             raise ValidationError({
-                'nivel_tanque_gal': (
-                    'Indica el nivel real después de cargar; debe ser al menos igual '
-                    'a los galones comprados.'
+                'galones': (
+                    f'La unidad ya registra {combustible_actual} galones; solo puede '
+                    f'agregar hasta {disponible} galones sin superar la capacidad '
+                    f'del tanque ({capacidad} galones).'
                 )
             })
-        if nivel_tanque > capacidad:
-            raise ValidationError({
-                'nivel_tanque_gal': 'El nivel después de cargar no puede superar la capacidad del tanque.'
-            })
+        nivel_tanque = datos.get('nivel_tanque_gal')
+        if nivel_tanque is not None:
+            if nivel_tanque <= 0 or nivel_tanque < datos['galones']:
+                raise ValidationError({
+                    'nivel_tanque_gal': (
+                        'Indica el nivel real después de cargar; debe ser al menos igual '
+                        'a los galones comprados.'
+                    )
+                })
+            if nivel_tanque > capacidad:
+                raise ValidationError({
+                    'nivel_tanque_gal': 'El nivel después de cargar no puede superar la capacidad del tanque.'
+                })
         if datos['fecha_hora'] > timezone.now():
             raise ValidationError({'fecha_hora': 'La fecha de la recarga no puede estar en el futuro.'})
         if viaje and viaje.id_estado_viaje == 2:
@@ -677,9 +758,13 @@ class RecargaCombustibleViewSet(viewsets.ModelViewSet):
             if datos['fecha_hora'] < viaje.fecha_salida:
                 raise ValidationError({'fecha_hora': 'La recarga de un viaje en curso no puede ser anterior a la salida.'})
         recarga = serializer.save(id_unidad=unidad, id_viaje=viaje)
-        unidad.combustible_actual_gal = nivel_tanque
-        unidad.fecha_combustible_actual = recarga.fecha_hora
-        unidad.save(update_fields=['combustible_actual_gal', 'fecha_combustible_actual'])
+        combustible_final = nivel_tanque
+        if combustible_final is None and combustible_actual is not None:
+            combustible_final = combustible_actual + datos['galones']
+        if combustible_final is not None:
+            unidad.combustible_actual_gal = combustible_final
+            unidad.fecha_combustible_actual = recarga.fecha_hora
+            unidad.save(update_fields=['combustible_actual_gal', 'fecha_combustible_actual'])
 
         # Calcular el total de galones recargados para el viaje.
         if recarga.id_viaje:
@@ -692,7 +777,7 @@ class RecargaCombustibleViewSet(viewsets.ModelViewSet):
 class PosicionGPSViewSet(viewsets.ModelViewSet):
     queryset = PosicionGPS.objects.order_by('-fecha_hora')
     serializer_class = PosicionGPSSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsAdministratorOrReadOnly]
     filterset_fields = ['id_dispositivo', 'id_viaje']
     ordering_fields = ['fecha_hora', 'velocidad_kmh']
     ordering = ['-fecha_hora']
@@ -707,7 +792,7 @@ class PosicionGPSViewSet(viewsets.ModelViewSet):
 class AlertaViewSet(viewsets.ModelViewSet):
     queryset = Alerta.objects.all()
     serializer_class = AlertaSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsAdministratorOrReadOnly]
 
     @action(detail=False, methods=['get'])
     def pendientes(self, request):

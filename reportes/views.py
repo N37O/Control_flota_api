@@ -1,13 +1,15 @@
-from rest_framework import views, permissions, status
+from rest_framework import views, status
 from rest_framework.response import Response
 from django.db.models import Avg, DecimalField, ExpressionWrapper, F, Q
 from django.utils import timezone
 from django.utils.dateparse import parse_date
+from usuarios.permissions import FleetRolePermission
 from viajes.models import Viaje
 from unidades.models import Unidad
 
 class PanelFlotaView(views.APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [FleetRolePermission]
+    supervisor_read_actions = {'get'}
 
     def get(self, request):
         unidades_disponibles = Unidad.objects.filter(
@@ -17,7 +19,7 @@ class PanelFlotaView(views.APIView):
         unidades_transito = Unidad.objects.filter(
             Q(id_estado_unidad__nombre__iexact='En viaje')
             | Q(id_estado_unidad__nombre__iexact='EN_VIAJE'),
-            activo=True,
+            activo=True,                        
         ).count()
         
         viajes_programados = Viaje.objects.filter(id_estado_viaje=1).count()
@@ -38,7 +40,8 @@ class PanelFlotaView(views.APIView):
         })
 
 class RendimientoView(views.APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [FleetRolePermission]
+    supervisor_read_actions = {'get'}
 
     def get(self, request):
         viajes = Viaje.objects.filter(
@@ -62,7 +65,8 @@ class RendimientoView(views.APIView):
         })
 
 class HistorialView(views.APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [FleetRolePermission]
+    supervisor_read_actions = {'get'}
 
     def get(self, request):
         viajes = Viaje.objects.all().select_related(

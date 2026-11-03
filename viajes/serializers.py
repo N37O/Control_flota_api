@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from django.utils import timezone
 from rest_framework import serializers
 from unidades.models import DispositivoGPS, Unidad
 from .models import (Ubicacion, Cliente, TipoCarga, EstadoViaje, Viaje, 
@@ -124,7 +125,8 @@ class RecargaCombustibleSerializer(serializers.ModelSerializer):
     nivel_tanque_gal = serializers.DecimalField(
         max_digits=8,
         decimal_places=2,
-        required=True,
+        required=False,
+        allow_null=True,
     )
     viaje_correlativo = serializers.CharField(
         source='id_viaje.correlativo',
@@ -235,6 +237,7 @@ class ViajeSerializer(serializers.ModelSerializer):
 
     estado_texto = serializers.SerializerMethodField()
     total_cargas = serializers.SerializerMethodField()
+    progreso_simulado = serializers.SerializerMethodField()
 
     class Meta:
         model = Viaje
@@ -242,7 +245,8 @@ class ViajeSerializer(serializers.ModelSerializer):
             'id_viaje', 'correlativo', 'id_unidad', 'id_conductor',
             'id_origen', 'id_destino', 'id_cliente', 'id_estado_viaje',
             'estado_texto', 'distancia_km', 'polyline_ruta', 'fecha_programada', 'fecha_salida',
-            'fecha_llegada_est', 'fecha_llegada_real',
+            'fecha_llegada_est', 'fecha_llegada_real', 'es_simulado',
+            'progreso_simulado',
             'odometro_salida', 'odometro_llegada',
             'combustible_salida_gal', 'combustible_llegada_gal',
             'precio_galon', 'observaciones', 'creado_en',
@@ -253,7 +257,7 @@ class ViajeSerializer(serializers.ModelSerializer):
             'km_recorridos', 'rendimiento_km_gal', 'costo_combustible',
             'alerta_consumo'
         ]
-        read_only_fields = ['creado_en']
+        read_only_fields = ['creado_en', 'es_simulado', 'progreso_simulado']
         extra_kwargs = {
             'id_conductor': {'required': False, 'allow_null': True}
         }
@@ -338,6 +342,22 @@ class ViajeSerializer(serializers.ModelSerializer):
             })
 
         return attrs
+
+    def get_progreso_simulado(self, viaje):
+        if (
+            not viaje.es_simulado
+            or viaje.id_estado_viaje != 2
+            or not viaje.fecha_salida
+            or not viaje.fecha_llegada_est
+        ):
+            return 0.0
+
+        duracion = (viaje.fecha_llegada_est - viaje.fecha_salida).total_seconds()
+        if duracion <= 0:
+            return 0.0
+
+        transcurrido = (timezone.now() - viaje.fecha_salida).total_seconds()
+        return max(0.0, min(transcurrido / duracion, 1.0))
 
     def get_estado_texto(self, obj):
         estados = {1: 'PROGRAMADO', 2: 'EN_CURSO', 3: 'COMPLETADO', 4: 'CANCELADO'}

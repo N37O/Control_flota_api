@@ -2,17 +2,22 @@ from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Rol, Usuario
+from .permissions import FleetRolePermission, IsAdminRole
 from .serializers import RolSerializer, UsuarioSerializer, LoginSerializer
 
 class RolViewSet(viewsets.ModelViewSet):
     queryset = Rol.objects.all()
     serializer_class = RolSerializer
-    # Cambiamos temporalmente a AllowAny para descartar errores de token
-    permission_classes = [permissions.AllowAny] 
+    permission_classes = [IsAdminRole]
 
     def perform_destroy(self, instance):
+        if instance.nombre.strip().upper() in {'ADMINISTRADOR', 'OPERADOR', 'SUPERVISOR'}:
+            raise ValidationError({
+                'detail': 'No se pueden eliminar los roles base del sistema.'
+            })
         if instance.usuario_set.exists():
             raise ValidationError({
                 'detail': 'No se puede eliminar este rol porque tiene usuarios asignados.'
@@ -23,7 +28,17 @@ class RolViewSet(viewsets.ModelViewSet):
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
-    permission_classes = [permissions.IsAuthenticated]
+
+    def get_permissions(self):
+        if self.action == 'yo':
+            return [IsAuthenticated()]
+        return [IsAdminRole()]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.id_rol.nombre.strip().upper() == 'ADMINISTRADOR':
+            return queryset
+        return queryset.filter(pk=self.request.user.pk)
 
     @action(detail=False, methods=['get'])
     def activos(self, request):

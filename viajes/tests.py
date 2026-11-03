@@ -5,6 +5,7 @@ from types import SimpleNamespace
 from django.test import SimpleTestCase, TestCase
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
+from unittest.mock import Mock, patch
 from rest_framework.exceptions import ValidationError
 from rest_framework.test import APIClient
 
@@ -15,7 +16,8 @@ from unidades.models import (
 from usuarios.models import Rol, Usuario
 from .models import Movimiento, Ubicacion
 from .views import (
-	_estado_viaje_id, _tipos_unidad_compatibles, _validar_carga_para_viaje,
+	_estado_viaje_id, _sincronizar_viajes_simulados,
+	_tipos_unidad_compatibles, _validar_carga_para_viaje,
 	_validar_lectura_combustible, _validar_transicion_viaje,
 )
 
@@ -81,11 +83,11 @@ class CatalogoDistritosTests(TestCase):
 
 class PlanificacionViajeAPITests(TestCase):
 	def setUp(self):
-		rol = Rol.objects.create(nombre='OPERADOR')
+		rol = Rol.objects.get(nombre='ADMINISTRADOR')
 		usuario = Usuario.objects.create_user(
 			usuario='viaje-validacion',
 			password='test-password',
-			nombre='Operador de viajes',
+			nombre='Administrador de viajes',
 			correo='viaje-validacion@example.com',
 			id_rol=rol,
 		)
@@ -208,11 +210,11 @@ class PlanificacionViajeAPITests(TestCase):
 
 class MovimientoFechaAutomaticaTests(TestCase):
 	def setUp(self):
-		rol = Rol.objects.create(nombre='OPERADOR')
+		rol = Rol.objects.get(nombre='ADMINISTRADOR')
 		usuario = Usuario.objects.create_user(
 			usuario='movimiento-fecha',
 			password='test-password',
-			nombre='Operador',
+			nombre='Administrador',
 			correo='movimiento-fecha@example.com',
 			id_rol=rol,
 		)
@@ -276,6 +278,114 @@ class EstadoViajeParsingTests(TestCase):
 			with self.subTest(current=current, target=target):
 				with self.assertRaises(ValidationError):
 					_validar_transicion_viaje(current, target)
+
+
+class ViajeProgramadoSimuladoTests(SimpleTestCase):
+	def _sincronizar(self, viaje, ahora):
+		queryset = Mock()
+		queryset.select_related.return_value.filter.return_value.order_by.return_value = (
+			[viaje]
+			if (
+				viaje.id_estado_viaje == 1
+				and viaje.fecha_programada <= ahora
+			) or (
+				viaje.id_estado_viaje == 2
+				and viaje.es_simulado
+				and viaje.fecha_llegada_est <= ahora
+			)
+			else []
+		)
+		with (
+			patch(
+				'viajes.views.Viaje.objects.select_for_update',
+				return_value=queryset,
+			),
+			patch('viajes.views.timezone.now', return_value=ahora),
+		):
+			_sincronizar_viajes_simulados()
+
+	def _viaje(self, salida, llegada):
+		unidad = SimpleNamespace(
+			id_estado_unidad_id=1,
+			save=Mock(),
+		)
+		return SimpleNamespace(
+			id_estado_viaje=1,
+			fecha_programada=salida,
+			fecha_llegada_est=llegada,
+			fecha_salida=None,
+			fecha_llegada_real=None,
+			es_simulado=False,
+			id_unidad=unidad,
+			save=Mock(),
+		)
+
+	def test_due_departure_starts_simulation_without_fabricating_real_movements(self):
+		ahora = timezone.now()
+		salida = ahora - timedelta(minutes=30)
+		llegada = ahora + timedelta(minutes=30)
+		viaje = self._viaje(salida, llegada)
+
+		self._sincronizar(viaje, ahora)
+
+		self.assertEqual(viaje.id_estado_viaje, 2)
+		self.assertTrue(viaje.es_simulado)
+		self.assertEqual(viaje.fecha_salida, salida)
+		self.assertEqual(viaje.id_unidad.id_estado_unidad_id, 2)
+		viaje.save.assert_called_once()
+		viaje.id_unidad.save.assert_called_once_with(
+			update_fields=['id_estado_unidad_id'],
+		)
+
+		with patch('viajes.serializers.timezone.now', return_value=ahora):
+			progreso = ViajeSerializer().get_progreso_simulado(viaje)
+		self.assertAlmostEqual(progreso, 0.5)
+
+	def test_due_arrival_completes_simulation_and_releases_unit(self):
+		ahora = timezone.now()
+		salida = ahora - timedelta(hours=2)
+		llegada = ahora - timedelta(hours=1)
+		viaje = self._viaje(salida, llegada)
+		viaje.id_unidad.id_estado_unidad_id = 2
+
+		self._sincronizar(viaje, ahora)
+
+		self.assertEqual(viaje.id_estado_viaje, 3)
+		self.assertTrue(viaje.es_simulado)
+		self.assertEqual(viaje.fecha_llegada_real, llegada)
+		self.assertEqual(viaje.id_unidad.id_estado_unidad_id, 1)
+
+	def test_in_progress_simulation_completes_when_estimated_arrival_is_due(self):
+		ahora = timezone.now()
+		salida = ahora - timedelta(hours=2)
+		llegada = ahora - timedelta(minutes=1)
+		viaje = self._viaje(salida, llegada)
+		viaje.id_estado_viaje = 2
+		viaje.es_simulado = True
+		viaje.id_unidad.id_estado_unidad_id = 2
+
+		self._sincronizar(viaje, ahora)
+
+		self.assertEqual(viaje.id_estado_viaje, 3)
+		self.assertEqual(viaje.fecha_llegada_real, llegada)
+		self.assertEqual(viaje.id_unidad.id_estado_unidad_id, 1)
+		viaje.save.assert_called_once()
+		viaje.id_unidad.save.assert_called_once_with(
+			update_fields=['id_estado_unidad_id'],
+		)
+
+	def test_future_departure_stays_scheduled(self):
+		ahora = timezone.now()
+		viaje = self._viaje(
+			ahora + timedelta(minutes=30),
+			ahora + timedelta(hours=2),
+		)
+
+		self._sincronizar(viaje, ahora)
+
+		self.assertEqual(viaje.id_estado_viaje, 1)
+		self.assertFalse(viaje.es_simulado)
+		viaje.save.assert_not_called()
 
 
 class CargaCompatibilidadTests(SimpleTestCase):
@@ -354,7 +464,7 @@ class LecturaCombustibleTests(SimpleTestCase):
 
 class PosicionGPSAPITests(TestCase):
 	def setUp(self):
-		role = Rol.objects.create(nombre='OPERADOR')
+		role = Rol.objects.get(nombre='ADMINISTRADOR')
 		user = Usuario.objects.create_user(
 			usuario='gps-operador',
 			password='test-password',

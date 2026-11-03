@@ -38,12 +38,12 @@ class UnidadSerializerTests(SimpleTestCase):
 
 class UnidadCombustibleActualTests(TestCase):
     def setUp(self):
-        role = Rol.objects.create(nombre='OPERADOR')
+        role = Rol.objects.get(nombre='ADMINISTRADOR')
         user = Usuario.objects.create_user(
-            usuario='unidad-combustible',
+            usuario='admin-combustible',
             password='test-password',
-            nombre='Operador',
-            correo='unidad-combustible@example.com',
+            nombre='Administrador',
+            correo='admin-combustible@example.com',
             id_rol=role,
         )
         self.client = APIClient()
@@ -110,6 +110,60 @@ class UnidadCombustibleActualTests(TestCase):
         self.assertIsNone(response.data['id_viaje'])
         self.assertEqual(response.data['unidad_placa'], self.unidad.placa)
 
+    def test_refuel_without_tank_level_adds_gallons_to_known_fuel_level(self):
+        now = timezone.now()
+        self.unidad.combustible_actual_gal = Decimal('42.50')
+        self.unidad.fecha_combustible_actual = now - timedelta(hours=1)
+        self.unidad.save(update_fields=[
+            'combustible_actual_gal',
+            'fecha_combustible_actual',
+        ])
+
+        response = self.client.post(
+            '/api/viajes/recargas/',
+            {
+                'id_unidad': self.unidad.pk,
+                'fecha_hora': now.isoformat(),
+                'galones': '20.00',
+                'precio_galon': '4.250',
+                'lugar': 'Gasolinera de prueba',
+            },
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, 201, response.data)
+        self.assertIsNone(response.data['nivel_tanque_gal'])
+        self.unidad.refresh_from_db()
+        self.assertEqual(self.unidad.combustible_actual_gal, Decimal('62.50'))
+        self.assertEqual(
+            self.unidad.fecha_combustible_actual,
+            now,
+        )
+
+    def test_refuel_cannot_exceed_remaining_tank_capacity(self):
+        self.unidad.capacidad_tanque_gal = Decimal('60.00')
+        self.unidad.combustible_actual_gal = Decimal('30.00')
+        self.unidad.save(update_fields=[
+            'capacidad_tanque_gal',
+            'combustible_actual_gal',
+        ])
+
+        response = self.client.post(
+            '/api/viajes/recargas/',
+            {
+                'id_unidad': self.unidad.pk,
+                'fecha_hora': timezone.now().isoformat(),
+                'galones': '40.00',
+                'precio_galon': '4.250',
+            },
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, 400, response.data)
+        self.assertIn('galones', response.data)
+        self.unidad.refresh_from_db()
+        self.assertEqual(self.unidad.combustible_actual_gal, Decimal('30.00'))
+
     def test_refuel_rejects_post_fill_level_over_tank_capacity(self):
         response = self.client.post(
             '/api/viajes/recargas/',
@@ -128,9 +182,72 @@ class UnidadCombustibleActualTests(TestCase):
         self.unidad.refresh_from_db()
         self.assertIsNone(self.unidad.combustible_actual_gal)
 
+
+class OperatorPermissionTests(TestCase):
+    def setUp(self):
+        role = Rol.objects.get(nombre='OPERADOR')
+        user = Usuario.objects.create_user(
+            usuario='operador-solo-lectura',
+            password='test-password',
+            nombre='Operador',
+            correo='operador-solo-lectura@example.com',
+            id_rol=role,
+        )
+        self.client = APIClient()
+        self.client.force_authenticate(user=user)
+
+    def test_operator_can_register_units_but_not_manage_catalogs_or_users(self):
+        response = self.client.get('/api/unidades/conductores/')
+        self.assertEqual(response.status_code, 200, response.data)
+
+        response = self.client.get('/api/viajes/viajes/')
+        self.assertEqual(response.status_code, 200, response.data)
+
+        response = self.client.post(
+            '/api/unidades/conductores/',
+            {'nombre': 'Conductor bloqueado'},
+            format='json',
+        )
+        self.assertEqual(response.status_code, 403, response.data)
+
+        response = self.client.patch(
+            '/api/unidades/conductores/999/',
+            {'nombre': 'Cambio bloqueado'},
+            format='json',
+        )
+        self.assertEqual(response.status_code, 403, response.data)
+
+        response = self.client.delete('/api/unidades/conductores/999/')
+        self.assertEqual(response.status_code, 403, response.data)
+
+        response = self.client.post(
+            '/api/viajes/viajes/',
+            {},
+            format='json',
+        )
+        self.assertEqual(response.status_code, 400, response.data)
+
+        response = self.client.post('/api/unidades/unidades/', {}, format='json')
+        self.assertEqual(response.status_code, 400, response.data)
+
+        response = self.client.patch(
+            '/api/viajes/viajes/999/',
+            {'observaciones': 'Cambio bloqueado'},
+            format='json',
+        )
+        self.assertEqual(response.status_code, 403, response.data)
+
+        response = self.client.post(
+            '/api/usuarios/usuarios/',
+            {},
+            format='json',
+        )
+        self.assertEqual(response.status_code, 403, response.data)
+
+
 class ConductorUploadTests(TestCase):
     def setUp(self):
-        self.rol = Rol.objects.create(nombre='ADMINISTRADOR', descripcion='Admin')
+        self.rol = Rol.objects.get(nombre='ADMINISTRADOR')
         self.user = Usuario.objects.create_user(
             usuario='admin',
             password='admin123',

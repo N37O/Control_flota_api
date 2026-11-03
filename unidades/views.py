@@ -4,7 +4,7 @@ import uuid
 from django.core.files.storage import default_storage
 from django.core.exceptions import ValidationError
 from django.db.models import Exists, OuterRef
-from rest_framework import viewsets, status, permissions, parsers
+from rest_framework import viewsets, status, parsers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
@@ -15,16 +15,19 @@ from .serializers import (TipoUnidadSerializer, EstadoUnidadSerializer,
                           UnidadSerializer, DispositivoGPSSerializer,
                           ConductorSerializer, AsignacionUnidadSerializer,
                           MantenimientoSerializer)
+from usuarios.permissions import FleetRolePermission
+
 
 class TipoUnidadViewSet(viewsets.ModelViewSet):
     queryset = TipoUnidad.objects.all()
     serializer_class = TipoUnidadSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [FleetRolePermission]
 
 class EstadoUnidadViewSet(viewsets.ModelViewSet):
     queryset = EstadoUnidad.objects.all()
     serializer_class = EstadoUnidadSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [FleetRolePermission]
+    supervisor_read_actions = {'list', 'retrieve'}
 
 class UnidadViewSet(viewsets.ModelViewSet):
     queryset = Unidad.objects.order_by('pk').annotate(
@@ -36,7 +39,11 @@ class UnidadViewSet(viewsets.ModelViewSet):
         ),
     )
     serializer_class = UnidadSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [
+        FleetRolePermission,
+    ]
+    operator_write_actions = {'create'}
+    supervisor_read_actions = {'list', 'retrieve'}
 
     def update(self, request, *args, **kwargs):
         """Sobrescribir update para garantizar que id_conductor=None se guarde"""
@@ -77,12 +84,13 @@ class UnidadViewSet(viewsets.ModelViewSet):
 class DispositivoGPSViewSet(viewsets.ModelViewSet):
     queryset = DispositivoGPS.objects.all()
     serializer_class = DispositivoGPSSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [FleetRolePermission]
 
 class ConductorViewSet(viewsets.ModelViewSet):
     queryset = Conductor.objects.all()
     serializer_class = ConductorSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [FleetRolePermission]
+    supervisor_read_actions = {'list', 'retrieve'}
     parser_classes = [parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['activo']
@@ -136,7 +144,7 @@ class ConductorViewSet(viewsets.ModelViewSet):
 class AsignacionUnidadViewSet(viewsets.ModelViewSet):
     queryset = AsignacionUnidad.objects.all()
     serializer_class = AsignacionUnidadSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [FleetRolePermission]
 
     @action(detail=False, methods=['post'])
     def asignar(self, request):
@@ -148,6 +156,6 @@ class AsignacionUnidadViewSet(viewsets.ModelViewSet):
 class MantenimientoViewSet(viewsets.ModelViewSet):
     queryset = Mantenimiento.objects.all()
     serializer_class = MantenimientoSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [FleetRolePermission]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['id_unidad', 'tipo']

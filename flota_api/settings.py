@@ -1,9 +1,12 @@
 import os
-import pymysql
-pymysql.install_as_MySQLdb()
-
 from pathlib import Path
 from datetime import timedelta
+
+try:
+    import pymysql
+    pymysql.install_as_MySQLdb()
+except ImportError:
+    pymysql = None
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -65,20 +68,29 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'flota_api.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'control_flota',
-        'USER': 'root',
-        'PASSWORD': '',  # ← Pon tu contraseña de MySQL aquí
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'OPTIONS': {
-            'charset': 'utf8mb4',
+db_engine = os.getenv('DB_ENGINE', 'mysql')
+
+if db_engine == 'sqlite3' or os.getenv('USE_SQLITE_FOR_TESTS') == '1':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-}
-
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv('DB_NAME', 'control_flota'),
+            'USER': os.getenv('DB_USER', 'root'),
+            'PASSWORD': os.getenv('DB_PASSWORD', ''),
+            'HOST': os.getenv('DB_HOST', 'localhost'),
+            'PORT': os.getenv('DB_PORT', '3306'),
+            'OPTIONS': {
+                'charset': 'utf8mb4',
+            }
+        }
+    }
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},

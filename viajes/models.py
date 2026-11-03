@@ -69,6 +69,7 @@ class Viaje(models.Model):
     id_estado_viaje = models.IntegerField(db_column='id_estado_viaje', default=1)  # 1=Programado, 2=En Curso, 3=Completado, 4=Cancelado
     distancia_km = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     polyline_ruta = models.TextField(blank=True, null=True)
+    es_simulado = models.BooleanField(default=False)
     fecha_programada = models.DateTimeField(blank=True, null=True)
     fecha_salida = models.DateTimeField(blank=True, null=True)
     fecha_llegada_est = models.DateTimeField(blank=True, null=True)
