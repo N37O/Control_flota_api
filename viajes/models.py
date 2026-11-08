@@ -27,7 +27,7 @@ class Cliente(models.Model):
     nit = models.CharField(max_length=50, blank=True, null=True)
     contacto = models.CharField(max_length=100, blank=True, null=True)
     telefono = models.CharField(max_length=20, blank=True, null=True)
-    correo = models.CharField(max_length=100, blank=True, null=True)
+    correo = models.CharField(max_length=120, blank=True, null=True)
     direccion = models.CharField(max_length=255, blank=True, null=True)
     activo = models.BooleanField(default=True)
     class Meta:
@@ -40,6 +40,8 @@ class TipoCarga(models.Model):
     id_tipo_carga = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100)
     unidades_compatibles = models.CharField(max_length=100, blank=True, null=True)  # IDs de tipos de unidad compatibles
+    requiere_refrigeracion = models.BooleanField(default=False)
+    es_peligrosa = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'tipo_carga'

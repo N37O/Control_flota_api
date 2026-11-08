@@ -4,10 +4,18 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.conf import settings
 from .models import Rol, Usuario
 from .permissions import FleetRolePermission, IsAdminRole
-from .serializers import RolSerializer, UsuarioSerializer, LoginSerializer
+from .serializers import (
+    RolSerializer,
+    UsuarioSerializer,
+    LoginSerializer,
+    LoginResponseSerializer,
+)
+from drf_spectacular.utils import extend_schema
 
+@extend_schema(tags=["Usuarios"])
 class RolViewSet(viewsets.ModelViewSet):
     queryset = Rol.objects.all()
     serializer_class = RolSerializer
@@ -25,6 +33,7 @@ class RolViewSet(viewsets.ModelViewSet):
         instance.delete()
 
 
+@extend_schema(tags=["Usuarios"])
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
@@ -53,10 +62,22 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+@extend_schema(request=LoginSerializer, responses=LoginResponseSerializer, auth=[])
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def login_view(request):
-    serializer = LoginSerializer(data=request.data)
+    oauth_password_flow = (
+        request.content_type == 'application/x-www-form-urlencoded'
+        and 'username' in request.data
+    )
+    login_data = request.data
+    if oauth_password_flow:
+        login_data = {
+            'usuario': request.data.get('username'),
+            'password': request.data.get('password'),
+        }
+
+    serializer = LoginSerializer(data=login_data)
     serializer.is_valid(raise_exception=True)
 
     try:
@@ -68,9 +89,19 @@ def login_view(request):
         # ✅ Usar check_password de Django (funciona con set_password)
         if usuario.check_password(serializer.validated_data['password']):
             refresh = RefreshToken.for_user(usuario)
+            access = refresh.access_token
+            if oauth_password_flow:
+                lifetime = settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
+                return Response({
+                    'access_token': str(access),
+                    'token_type': 'Bearer',
+                    'expires_in': int(lifetime.total_seconds()),
+                    'refresh_token': str(refresh),
+                    'scope': '',
+                })
             return Response({
                 'refresh': str(refresh),
-                'access': str(refresh.access_token),
+                'access': str(access),
                 'usuario': UsuarioSerializer(usuario).data
             })
         else:

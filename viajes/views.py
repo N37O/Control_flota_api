@@ -1,5 +1,6 @@
 from decimal import Decimal
 import json
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -21,7 +22,6 @@ from .serializers import (
 )
 from usuarios.permissions import (
     FleetRolePermission,
-    IsAdministratorOrReadOnly,
     IsOperatorOrAdministratorForCreate,
 )
 
@@ -274,21 +274,32 @@ class UbicacionViewSet(viewsets.ModelViewSet):
 class ClienteViewSet(viewsets.ModelViewSet):
     queryset = Cliente.objects.all()
     serializer_class = ClienteSerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdministratorOrReadOnly]
+    permission_classes = [FleetRolePermission]
+    supervisor_read_actions = {'list', 'retrieve'}
 
 
 class TipoCargaViewSet(viewsets.ModelViewSet):
     queryset = TipoCarga.objects.all()
     serializer_class = TipoCargaSerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdministratorOrReadOnly]
+    permission_classes = [FleetRolePermission]
+    supervisor_read_actions = {'list', 'retrieve'}
 
 
+@extend_schema(exclude=True)
 class EstadoViajeViewSet(viewsets.ModelViewSet):
     queryset = EstadoViaje.objects.all()
     serializer_class = EstadoViajeSerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdministratorOrReadOnly]
+    permission_classes = [FleetRolePermission]
+    supervisor_read_actions = {'list', 'retrieve'}
 
 
+@extend_schema_view(
+    create=extend_schema(exclude=True),
+    update=extend_schema(exclude=True),
+    partial_update=extend_schema(exclude=True),
+    destroy=extend_schema(exclude=True),
+)
+@extend_schema(tags=["Viajes"])
 class ViajeViewSet(viewsets.ModelViewSet):
     queryset = Viaje.objects.all()
     serializer_class = ViajeSerializer
@@ -672,7 +683,8 @@ class MovimientoViewSet(viewsets.ModelViewSet):
 class PrecioCombustibleViewSet(viewsets.ModelViewSet):
     queryset = PrecioCombustible.objects.all().order_by('-vigente_desde')
     serializer_class = PrecioCombustibleSerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdministratorOrReadOnly]
+    permission_classes = [FleetRolePermission]
+    supervisor_read_actions = {'list', 'retrieve'}
 
 
 class RecargaCombustibleViewSet(viewsets.ModelViewSet):
@@ -777,7 +789,7 @@ class RecargaCombustibleViewSet(viewsets.ModelViewSet):
 class PosicionGPSViewSet(viewsets.ModelViewSet):
     queryset = PosicionGPS.objects.order_by('-fecha_hora')
     serializer_class = PosicionGPSSerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdministratorOrReadOnly]
+    permission_classes = [FleetRolePermission]
     filterset_fields = ['id_dispositivo', 'id_viaje']
     ordering_fields = ['fecha_hora', 'velocidad_kmh']
     ordering = ['-fecha_hora']
@@ -792,7 +804,8 @@ class PosicionGPSViewSet(viewsets.ModelViewSet):
 class AlertaViewSet(viewsets.ModelViewSet):
     queryset = Alerta.objects.all()
     serializer_class = AlertaSerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdministratorOrReadOnly]
+    permission_classes = [FleetRolePermission]
+    supervisor_read_actions = {'list', 'retrieve', 'pendientes'}
 
     @action(detail=False, methods=['get'])
     def pendientes(self, request):

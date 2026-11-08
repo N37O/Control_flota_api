@@ -1,8 +1,10 @@
 import os
 import uuid
-
+import mimetypes
+from drf_spectacular.utils import extend_schema
 from django.core.files.storage import default_storage
 from django.core.exceptions import ValidationError
+from django.http import FileResponse, Http404
 from django.db.models import Exists, OuterRef
 from rest_framework import viewsets, status, parsers
 from rest_framework.decorators import action
@@ -15,7 +17,7 @@ from .serializers import (TipoUnidadSerializer, EstadoUnidadSerializer,
                           UnidadSerializer, DispositivoGPSSerializer,
                           ConductorSerializer, AsignacionUnidadSerializer,
                           MantenimientoSerializer)
-from usuarios.permissions import FleetRolePermission
+from usuarios.permissions import FleetRolePermission, IsAdminRole
 
 
 class TipoUnidadViewSet(viewsets.ModelViewSet):
@@ -29,6 +31,7 @@ class EstadoUnidadViewSet(viewsets.ModelViewSet):
     permission_classes = [FleetRolePermission]
     supervisor_read_actions = {'list', 'retrieve'}
 
+@extend_schema(tags=["Unidades"])
 class UnidadViewSet(viewsets.ModelViewSet):
     queryset = Unidad.objects.order_by('pk').annotate(
         tiene_viaje_activo=Exists(
@@ -86,6 +89,7 @@ class DispositivoGPSViewSet(viewsets.ModelViewSet):
     serializer_class = DispositivoGPSSerializer
     permission_classes = [FleetRolePermission]
 
+@extend_schema(tags=["Conductores"])
 class ConductorViewSet(viewsets.ModelViewSet):
     queryset = Conductor.objects.all()
     serializer_class = ConductorSerializer
@@ -94,6 +98,31 @@ class ConductorViewSet(viewsets.ModelViewSet):
     parser_classes = [parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['activo']
+
+    def get_permissions(self):
+        if self.action == 'licencia':
+            return [IsAdminRole()]
+        return super().get_permissions()
+
+    @action(detail=True, methods=['get'], url_path='licencia')
+    def licencia(self, request, pk=None):
+        conductor = self.get_object()
+        if not conductor.licencia_imagen:
+            raise Http404
+
+        try:
+            imagen = default_storage.open(conductor.licencia_imagen, 'rb')
+        except FileNotFoundError as error:
+            raise Http404 from error
+
+        content_type, _ = mimetypes.guess_type(conductor.licencia_imagen)
+        response = FileResponse(
+            imagen,
+            content_type=content_type or 'application/octet-stream',
+        )
+        response['Cache-Control'] = 'private, no-store'
+        response['X-Content-Type-Options'] = 'nosniff'
+        return response
 
     @staticmethod
     def _guardar_licencia_imagen(file_obj):

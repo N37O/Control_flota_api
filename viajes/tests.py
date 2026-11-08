@@ -9,7 +9,7 @@ from unittest.mock import Mock, patch
 from rest_framework.exceptions import ValidationError
 from rest_framework.test import APIClient
 
-from .serializers import ViajeSerializer
+from .serializers import ClienteSerializer, ViajeDetalleSerializer, ViajeSerializer
 from unidades.models import (
 	Conductor, DispositivoGPS, EstadoUnidad, TipoUnidad, Unidad,
 )
@@ -515,3 +515,64 @@ class PosicionGPSAPITests(TestCase):
 
 		self.assertEqual(response.status_code, 400, response.data)
 		self.assertIn('latitud', response.data)
+
+	def test_supervisor_cannot_read_exact_gps_positions(self):
+		role = Rol.objects.get(nombre='SUPERVISOR')
+		user = Usuario.objects.create_user(
+			usuario='supervisor-gps',
+			password='test-password',
+			nombre='Supervisor',
+			correo='supervisor-gps@example.com',
+			id_rol=role,
+		)
+		self.client.force_authenticate(user=user)
+
+		response = self.client.get('/api/viajes/posiciones-gps/')
+
+		self.assertEqual(response.status_code, 403, response.data)
+
+
+class ClienteDataMinimizationTests(SimpleTestCase):
+	def _fields_for_role(self, role_name):
+		user = SimpleNamespace(
+			id_rol=SimpleNamespace(nombre=role_name),
+		)
+		request = SimpleNamespace(user=user)
+		return set(ClienteSerializer(context={'request': request}).fields)
+
+	def test_operator_sees_only_customer_data_needed_for_dispatch(self):
+		fields = self._fields_for_role('OPERADOR')
+
+		self.assertIn('nombre', fields)
+		self.assertIn('direccion', fields)
+		self.assertFalse(
+			{'documento', 'nit', 'contacto', 'telefono', 'correo'} & fields
+		)
+
+	def test_supervisor_does_not_see_customer_contact_or_address(self):
+		fields = self._fields_for_role('SUPERVISOR')
+
+		self.assertFalse(
+			{
+				'documento', 'nit', 'contacto', 'telefono', 'correo',
+				'direccion',
+			} & fields
+		)
+
+	def test_admin_retains_customer_contact_and_billing_fields(self):
+		fields = self._fields_for_role('ADMINISTRADOR')
+
+		self.assertTrue({'nit', 'correo', 'direccion'} <= fields)
+
+
+class ViajeDataMinimizationTests(SimpleTestCase):
+	def test_route_geometry_is_returned_on_detail_but_not_list(self):
+		list_serializer = ViajeSerializer(
+			context={'view': SimpleNamespace(action='list')}
+		)
+		detail_serializer = ViajeDetalleSerializer(
+			context={'view': SimpleNamespace(action='retrieve')}
+		)
+
+		self.assertNotIn('polyline_ruta', list_serializer.fields)
+		self.assertIn('polyline_ruta', detail_serializer.fields)

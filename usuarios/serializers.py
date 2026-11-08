@@ -5,7 +5,7 @@ from .models import Rol, Usuario
 class RolSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rol
-        fields = '__all__'
+        fields = ['id_rol', 'nombre', 'descripcion']
 
 
 class UsuarioSerializer(serializers.ModelSerializer):
@@ -17,7 +17,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
         fields = [
             'id_usuario', 'id_rol', 'nombre', 'correo', 'usuario',
             'password', 'activo', 'ultimo_acceso', 'creado_en',
-            'rol_nombre', 'is_staff'
+            'rol_nombre',
         ]
         extra_kwargs = {
             'password': {'write_only': True}
@@ -43,3 +43,9 @@ class UsuarioSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     usuario = serializers.CharField()
     password = serializers.CharField()
+
+
+class LoginResponseSerializer(serializers.Serializer):
+    refresh = serializers.CharField()
+    access = serializers.CharField()
+    usuario = UsuarioSerializer(read_only=True)

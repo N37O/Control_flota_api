@@ -299,6 +299,7 @@ class ConductorUploadTests(TestCase):
                 self.assertEqual(response.status_code, 400, response.data)
                 self.assertIn(field_name, response.data)
 
+
     def test_create_conductor_rejects_dui_or_license_already_used(self):
         Conductor.objects.create(
             nombre='Conductor existente',
@@ -381,3 +382,103 @@ class ConductorUploadTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         mock_client.toggle_conductor_activo.assert_called_once_with('7', False)
+
+
+class ConductorDataMinimizationTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        Conductor.objects.create(
+            nombre='Conductor de prueba',
+            dui='12345678-9',
+            licencia='87654321-0',
+            tipo_licencia='Pesada',
+            licencia_imagen='conductores/licencias/prueba.png',
+            telefono='70000000',
+        )
+
+    def _login(self, role_name):
+        role = Rol.objects.get(nombre=role_name)
+        user = Usuario.objects.create_user(
+            usuario=f'conductor-{role_name.lower()}',
+            password='test-password',
+            nombre=role_name.title(),
+            correo=f'conductor-{role_name.lower()}@example.com',
+            id_rol=role,
+        )
+        self.client.force_authenticate(user=user)
+        return self.client.get('/api/unidades/conductores/')
+
+    def test_operator_sees_operational_contact_but_not_identity_documents(self):
+        response = self._login('OPERADOR')
+
+        self.assertEqual(response.status_code, 200, response.data)
+        conductor = response.data['results'][0]
+        self.assertEqual(conductor['telefono'], '70000000')
+        for field in ('dui', 'licencia', 'licencia_imagen', 'licencia_imagen_url'):
+            self.assertNotIn(field, conductor)
+
+    def test_supervisor_sees_neither_identity_documents_nor_private_phone(self):
+        response = self._login('SUPERVISOR')
+
+        self.assertEqual(response.status_code, 200, response.data)
+        conductor = response.data['results'][0]
+        for field in (
+            'dui',
+            'licencia',
+            'licencia_imagen',
+            'licencia_imagen_url',
+            'telefono',
+        ):
+            self.assertNotIn(field, conductor)
+
+
+class ConductorLicenseImageAccessTests(TestCase):
+    def test_license_image_requires_admin_and_is_not_public_media(self):
+        admin_role = Rol.objects.get(nombre='ADMINISTRADOR')
+        admin = Usuario.objects.create_user(
+            usuario='licencia-admin',
+            password='test-password',
+            nombre='Administrador',
+            correo='licencia-admin@example.com',
+            id_rol=admin_role,
+        )
+        operator_role = Rol.objects.get(nombre='OPERADOR')
+        operator = Usuario.objects.create_user(
+            usuario='licencia-operador',
+            password='test-password',
+            nombre='Operador',
+            correo='licencia-operador@example.com',
+            id_rol=operator_role,
+        )
+        image = SimpleUploadedFile(
+            'licencia.png',
+            b'private-license-image',
+            content_type='image/png',
+        )
+
+        with tempfile.TemporaryDirectory() as media_root:
+            with override_settings(MEDIA_ROOT=media_root):
+                create_client = APIClient()
+                create_client.force_authenticate(user=admin)
+                create_response = create_client.post(
+                    '/api/unidades/conductores/',
+                    {'nombre': 'Conductor privado', 'licencia_imagen': image},
+                    format='multipart',
+                )
+                self.assertEqual(create_response.status_code, 201)
+                licencia_url = create_response.data['licencia_imagen_url']
+
+                image_response = create_client.get(licencia_url)
+                self.assertEqual(image_response.status_code, 200)
+                self.assertEqual(image_response['Cache-Control'], 'private, no-store')
+                self.assertEqual(b''.join(image_response.streaming_content), b'private-license-image')
+
+                operator_client = APIClient()
+                operator_client.force_authenticate(user=operator)
+                denied_response = operator_client.get(licencia_url)
+                self.assertEqual(denied_response.status_code, 403)
+
+                public_media_response = APIClient().get(
+                    f"/media/{create_response.data['licencia_imagen']}"
+                )
+                self.assertEqual(public_media_response.status_code, 404)

@@ -5,20 +5,29 @@ from rest_framework import serializers
 from .models import (TipoUnidad, EstadoUnidad, Unidad, DispositivoGPS, 
                      Conductor, AsignacionUnidad, Mantenimiento)
 
+
+def _request_role(context):
+    request = context.get('request')
+    user = getattr(request, 'user', None)
+    return str(
+        getattr(getattr(user, 'id_rol', None), 'nombre', '')
+    ).strip().upper()
+
+
 class TipoUnidadSerializer(serializers.ModelSerializer):
     class Meta:
         model = TipoUnidad
-        fields = '__all__'
+        fields = ['id_tipo_unidad', 'nombre', 'descripcion']
 
 class EstadoUnidadSerializer(serializers.ModelSerializer):
     class Meta:
         model = EstadoUnidad
-        fields = '__all__'
+        fields = ['id_estado_unidad', 'nombre']
 
 class DispositivoGPSSerializer(serializers.ModelSerializer):
     class Meta:
         model = DispositivoGPS
-        fields = '__all__'
+        fields = ['id_dispositivo', 'numero_serie', 'modelo', 'activo']
 
 class ConductorSerializer(serializers.ModelSerializer):
     dui = serializers.CharField(
@@ -69,13 +78,27 @@ class ConductorSerializer(serializers.ModelSerializer):
             'licencia_imagen_url': {'read_only': True},
         }
 
+    def get_fields(self):
+        fields = super().get_fields()
+        role = _request_role(self.context)
+        if role != 'ADMINISTRADOR':
+            for name in (
+                'dui',
+                'licencia',
+                'licencia_imagen',
+                'licencia_imagen_url',
+            ):
+                fields.pop(name, None)
+        if role == 'SUPERVISOR':
+            fields.pop('telefono', None)
+        return fields
+
     def get_licencia_imagen_url(self, obj):
         if obj.licencia_imagen:
-            request = self.context.get('request')
-            if request:
-                if obj.licencia_imagen.startswith('http'):
-                    return obj.licencia_imagen
-                return '/media/' + obj.licencia_imagen.lstrip('/')
+            if obj.licencia_imagen.startswith('http'):
+                return obj.licencia_imagen
+
+            return f'/api/unidades/conductores/{obj.pk}/licencia/'
         return None
 
 class AsignacionUnidadSerializer(serializers.ModelSerializer):
@@ -84,7 +107,11 @@ class AsignacionUnidadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AsignacionUnidad
-        fields = '__all__'
+        fields = [
+            'id_asignacion', 'id_unidad', 'id_conductor',
+            'fecha_asignacion', 'fecha_fin', 'activa',
+            'unidad_placa', 'conductor_nombre',
+        ]
         read_only_fields = ['unidad_placa', 'conductor_nombre']
 
 class MantenimientoSerializer(serializers.ModelSerializer):
@@ -92,8 +119,17 @@ class MantenimientoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Mantenimiento
-        fields = '__all__'
+        fields = [
+            'id_mantenimiento', 'id_unidad', 'tipo', 'descripcion',
+            'fecha', 'costo', 'activo', 'unidad_placa',
+        ]
         read_only_fields = ['unidad_placa']
+
+    def get_fields(self):
+        fields = super().get_fields()
+        if _request_role(self.context) != 'ADMINISTRADOR':
+            fields.pop('costo', None)
+        return fields
 
 class UnidadSerializer(serializers.ModelSerializer):
     capacidad_tanque_gal = serializers.DecimalField(

@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 from django.test import TestCase
 from rest_framework.test import APIClient, APIRequestFactory
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -43,6 +45,20 @@ class RolDeletionTests(TestCase):
 
         self.assertEqual(response.status_code, 204)
         self.assertFalse(Rol.objects.filter(pk=self.rol.pk).exists())
+
+
+class ProductionSuperuserTests(TestCase):
+    def test_createsuperuser_assigns_the_administrator_role(self):
+        user = Usuario.objects.create_superuser(
+            usuario='deployment-admin',
+            password='test-password',
+            nombre='Administrador de despliegue',
+            correo='deployment-admin@example.com',
+        )
+
+        self.assertTrue(user.is_staff)
+        self.assertTrue(user.is_superuser)
+        self.assertEqual(user.id_rol.nombre, 'ADMINISTRADOR')
 
 
 class StandardRolePermissionTests(TestCase):
@@ -200,3 +216,69 @@ class TokenRefreshTests(TestCase):
         self.assertEqual(response.status_code, 200, response.data)
         self.assertIn('access', response.data)
         self.assertIn('refresh', response.data)
+
+
+class SwaggerOAuthAuthorizationTests(TestCase):
+    def setUp(self):
+        self.rol = Rol.objects.get(nombre='ADMINISTRADOR')
+        self.usuario = Usuario.objects.create_user(
+            usuario='swagger-prueba',
+            password='test-password',
+            nombre='Usuario Swagger',
+            correo='swagger-prueba@example.com',
+            id_rol=self.rol,
+        )
+
+    def test_swagger_login_form_returns_access_token_accepted_by_api(self):
+        response = APIClient().generic(
+            'POST',
+            '/api/usuarios/login/',
+            urlencode({
+                'username': 'swagger-prueba',
+                'password': 'test-password',
+                'grant_type': 'password',
+            }),
+            content_type='application/x-www-form-urlencoded',
+        )
+
+        self.assertEqual(response.status_code, 200, response.data)
+        self.assertEqual(response.data['token_type'], 'Bearer')
+        self.assertEqual(response.data['expires_in'], 8 * 60 * 60)
+        self.assertIn('refresh_token', response.data)
+
+        client = APIClient()
+        client.credentials(
+            HTTP_AUTHORIZATION=f"Bearer {response.data['access_token']}"
+        )
+        protected_response = client.get('/api/usuarios/usuarios/yo/')
+        self.assertEqual(protected_response.status_code, 200, protected_response.data)
+        self.assertEqual(protected_response.data['usuario'], 'swagger-prueba')
+
+    def test_swagger_ui_and_oauth2_schema_are_public_and_configured(self):
+        client = APIClient()
+
+        swagger_response = client.get('/swagger/')
+        self.assertEqual(swagger_response.status_code, 200)
+
+        schema_response = client.get('/schema/')
+        self.assertEqual(schema_response.status_code, 200)
+        auth_scheme = schema_response.data['components']['securitySchemes']['jwtAuth']
+        self.assertEqual(auth_scheme['type'], 'oauth2')
+        self.assertEqual(
+            auth_scheme['flows']['password']['tokenUrl'],
+            '/api/usuarios/login/',
+        )
+
+    def test_existing_json_login_response_is_unchanged(self):
+        response = APIClient().post(
+            '/api/usuarios/login/',
+            {'usuario': 'swagger-prueba', 'password': 'test-password'},
+            format='json',
+        )
+
+        self.assertEqual(response.status_code, 200, response.data)
+        self.assertIn('access', response.data)
+        self.assertIn('refresh', response.data)
+        self.assertIn('usuario', response.data)
+        self.assertNotIn('password', response.data['usuario'])
+        self.assertNotIn('is_staff', response.data['usuario'])

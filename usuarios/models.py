@@ -27,6 +27,22 @@ class UsuarioManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('activo', True)
+        if not extra_fields['is_staff']:
+            raise ValueError('Un superusuario debe tener is_staff=True.')
+        if not extra_fields['is_superuser']:
+            raise ValueError('Un superusuario debe tener is_superuser=True.')
+
+        Rol = self.model._meta.get_field('id_rol').remote_field.model
+        rol_administrador, _ = Rol.objects.using(self._db).get_or_create(
+            nombre='ADMINISTRADOR',
+            defaults={
+                'descripcion': (
+                    'Administra usuarios, roles y la configuración completa '
+                    'del sistema.'
+                ),
+            },
+        )
+        extra_fields['id_rol'] = rol_administrador
         return self.create_user(usuario, password, **extra_fields)
 
 

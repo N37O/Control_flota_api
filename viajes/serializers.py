@@ -8,6 +8,14 @@ from .models import (Ubicacion, Cliente, TipoCarga, EstadoViaje, Viaje,
                      PosicionGPS, Alerta)
 
 
+def _request_role(context):
+    request = context.get('request')
+    user = getattr(request, 'user', None)
+    return str(
+        getattr(getattr(user, 'id_rol', None), 'nombre', '')
+    ).strip().upper()
+
+
 def _validar_geometria_polyline(geometria):
     if len(geometria) > 100000:
         raise serializers.ValidationError(
@@ -67,7 +75,10 @@ def _validar_geometria_polyline(geometria):
 class UbicacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ubicacion
-        fields = '__all__'
+        fields = [
+            'id_ubicacion', 'nombre', 'departamento', 'direccion',
+            'latitud', 'longitud', 'es_base', 'activo',
+        ]
 
 class ClienteSerializer(serializers.ModelSerializer):
     class Meta:
@@ -86,6 +97,16 @@ class ClienteSerializer(serializers.ModelSerializer):
             'correo': {'required': False, 'allow_null': True}
         }
 
+    def get_fields(self):
+        fields = super().get_fields()
+        role = _request_role(self.context)
+        if role != 'ADMINISTRADOR':
+            for name in ('documento', 'nit', 'contacto', 'telefono', 'correo'):
+                fields.pop(name, None)
+        if role == 'SUPERVISOR':
+            fields.pop('direccion', None)
+        return fields
+
 class TipoCargaSerializer(serializers.ModelSerializer):
     class Meta:
         model = TipoCarga
@@ -96,7 +117,7 @@ class TipoCargaSerializer(serializers.ModelSerializer):
 class EstadoViajeSerializer(serializers.ModelSerializer):
     class Meta:
         model = EstadoViaje
-        fields = '__all__'
+        fields = ['id_estado_viaje', 'codigo', 'nombre']
 
 class CargaSerializer(serializers.ModelSerializer):
     viaje_correlativo = serializers.CharField(source='id_viaje.correlativo', read_only=True, allow_null=True)
@@ -115,7 +136,10 @@ class CargaSerializer(serializers.ModelSerializer):
 class PrecioCombustibleSerializer(serializers.ModelSerializer):
     class Meta:
         model = PrecioCombustible
-        fields = '__all__'
+        fields = [
+            'id_precio', 'tipo', 'precio_galon',
+            'vigente_desde', 'vigente_hasta',
+        ]
 
 class RecargaCombustibleSerializer(serializers.ModelSerializer):
     id_unidad = serializers.PrimaryKeyRelatedField(
@@ -146,6 +170,13 @@ class RecargaCombustibleSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'id_viaje': {'required': False, 'allow_null': True},
         }
+
+    def get_fields(self):
+        fields = super().get_fields()
+        if _request_role(self.context) != 'ADMINISTRADOR':
+            for name in ('precio_galon', 'numero_factura'):
+                fields[name].write_only = True
+        return fields
 
 class MovimientoSerializer(serializers.ModelSerializer):
     unidad_placa = serializers.CharField(source='id_unidad.placa', read_only=True)
@@ -202,12 +233,24 @@ class PosicionGPSSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PosicionGPS
-        fields = '__all__'
+        fields = [
+            'id_posicion', 'id_dispositivo', 'id_viaje', 'latitud',
+            'longitud', 'velocidad_kmh', 'rumbo', 'fecha_hora',
+        ]
 
 class AlertaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Alerta
-        fields = '__all__'
+        fields = [
+            'id_alerta', 'id_viaje', 'id_unidad', 'tipo', 'mensaje',
+            'severidad', 'fecha', 'atendida', 'atendida_por',
+        ]
+
+    def get_fields(self):
+        fields = super().get_fields()
+        if _request_role(self.context) != 'ADMINISTRADOR':
+            fields.pop('atendida_por', None)
+        return fields
 
 class ViajeSerializer(serializers.ModelSerializer):
     id_origen = serializers.PrimaryKeyRelatedField(
@@ -261,6 +304,17 @@ class ViajeSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'id_conductor': {'required': False, 'allow_null': True}
         }
+
+    def get_fields(self):
+        fields = super().get_fields()
+        role = _request_role(self.context)
+        if role != 'ADMINISTRADOR':
+            for name in ('precio_galon', 'costo_combustible'):
+                fields.pop(name, None)
+        view = self.context.get('view')
+        if getattr(view, 'action', None) == 'list':
+            fields.pop('polyline_ruta', None)
+        return fields
 
     def validate(self, attrs):
         fields_de_planificacion = {

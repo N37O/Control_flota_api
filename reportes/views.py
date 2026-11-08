@@ -1,4 +1,4 @@
-from rest_framework import views, status
+from rest_framework import serializers, views, status
 from rest_framework.response import Response
 from django.db.models import Avg, DecimalField, ExpressionWrapper, F, Q
 from django.utils import timezone
@@ -6,11 +6,38 @@ from django.utils.dateparse import parse_date
 from usuarios.permissions import FleetRolePermission
 from viajes.models import Viaje
 from unidades.models import Unidad
+from drf_spectacular.utils import OpenApiParameter, OpenApiTypes, extend_schema
+
+
+class PanelFlotaSerializer(serializers.Serializer):
+    unidades_disponibles = serializers.IntegerField()
+    unidades_transito = serializers.IntegerField()
+    viajes_programados = serializers.IntegerField()
+    viajes_transito = serializers.IntegerField()
+    alertas_pendientes = serializers.IntegerField()
+
+
+class RendimientoSerializer(serializers.Serializer):
+    rendimiento_promedio = serializers.FloatField()
+    total_viajes = serializers.IntegerField()
+
+
+class HistorialSerializer(serializers.Serializer):
+    correlativo = serializers.CharField()
+    unidad = serializers.CharField()
+    conductor = serializers.CharField()
+    origen = serializers.CharField()
+    destino = serializers.CharField()
+    estado = serializers.CharField()
+    fecha_salida = serializers.DateTimeField(allow_null=True)
+    fecha_llegada_est = serializers.DateTimeField(allow_null=True)
+    fecha_llegada_real = serializers.DateTimeField(allow_null=True)
 
 class PanelFlotaView(views.APIView):
     permission_classes = [FleetRolePermission]
     supervisor_read_actions = {'get'}
 
+    @extend_schema(responses=PanelFlotaSerializer)
     def get(self, request):
         unidades_disponibles = Unidad.objects.filter(
             id_estado_unidad__nombre__iexact='DISPONIBLE', activo=True
@@ -43,6 +70,7 @@ class RendimientoView(views.APIView):
     permission_classes = [FleetRolePermission]
     supervisor_read_actions = {'get'}
 
+    @extend_schema(responses=RendimientoSerializer)
     def get(self, request):
         viajes = Viaje.objects.filter(
             id_estado_viaje=3,
@@ -68,6 +96,21 @@ class HistorialView(views.APIView):
     permission_classes = [FleetRolePermission]
     supervisor_read_actions = {'get'}
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter('unidad', OpenApiTypes.INT, description='ID de la unidad'),
+            OpenApiParameter('conductor', OpenApiTypes.INT, description='ID del conductor'),
+            OpenApiParameter(
+                'estado',
+                OpenApiTypes.INT,
+                description='Estado del viaje: 1=programado, 2=en curso, 3=completado, 4=cancelado',
+            ),
+            OpenApiParameter('desde', OpenApiTypes.DATE, description='Fecha de salida mínima (YYYY-MM-DD)'),
+            OpenApiParameter('hasta', OpenApiTypes.DATE, description='Fecha de salida máxima (YYYY-MM-DD)'),
+            OpenApiParameter('buscar', OpenApiTypes.STR, description='Buscar por correlativo, placa, conductor u origen/destino'),
+        ],
+        responses=HistorialSerializer(many=True),
+    )
     def get(self, request):
         viajes = Viaje.objects.all().select_related(
             'id_unidad', 'id_conductor', 'id_origen', 'id_destino'

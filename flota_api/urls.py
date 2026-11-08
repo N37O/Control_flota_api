@@ -1,15 +1,14 @@
 from django.contrib import admin
-from django.conf import settings
-from django.conf.urls.static import static
 from django.urls import path, include
 from django.http import JsonResponse
 from rest_framework.routers import DefaultRouter
-from viajes.views import PrecioCombustibleViewSet, RecargaCombustibleViewSet, MovimientoViewSet
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularSwaggerView,
     SpectacularRedocView,
 )
+from viajes.views import PrecioCombustibleViewSet, RecargaCombustibleViewSet, MovimientoViewSet
+
 router = DefaultRouter()
 router.register(r'control/precios-combustible', PrecioCombustibleViewSet, basename='precios-combustible')
 router.register(r'control/recargas', RecargaCombustibleViewSet, basename='recargas')
@@ -23,28 +22,22 @@ def inicio_api(request):
     })
 
 urlpatterns = [
-    path('', inicio_api),  # <-- Esta línea atenderá la ruta http://127.0.0.1:8000/
-    path('admin/', admin.site.urls),
-  path('schema/', SpectacularAPIView.as_view(), name='schema'),
-
+    path('', inicio_api),
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path(
         'swagger/',
         SpectacularSwaggerView.as_view(url_name='schema'),
-        name='swagger-ui'
+        name='swagger-ui',
     ),
-
     path(
         'redoc/',
         SpectacularRedocView.as_view(url_name='schema'),
-        name='redoc'
+        name='redoc',
     ),
+    path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api/usuarios/', include('usuarios.urls')),
     path('api/unidades/', include('unidades.urls')),
     path('api/viajes/', include('viajes.urls')),
     path('api/reportes/', include('reportes.urls')),
 ]
-
-# Servir archivos media en desarrollo
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
