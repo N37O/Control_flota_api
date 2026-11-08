@@ -75,7 +75,7 @@ class ConductorSerializer(serializers.ModelSerializer):
             if request:
                 if obj.licencia_imagen.startswith('http'):
                     return obj.licencia_imagen
-                return request.build_absolute_uri('/media/' + obj.licencia_imagen.lstrip('/'))
+                return '/media/' + obj.licencia_imagen.lstrip('/')
         return None
 
 class AsignacionUnidadSerializer(serializers.ModelSerializer):

@@ -5,7 +5,11 @@ from django.urls import path, include
 from django.http import JsonResponse
 from rest_framework.routers import DefaultRouter
 from viajes.views import PrecioCombustibleViewSet, RecargaCombustibleViewSet, MovimientoViewSet
-
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularSwaggerView,
+    SpectacularRedocView,
+)
 router = DefaultRouter()
 router.register(r'control/precios-combustible', PrecioCombustibleViewSet, basename='precios-combustible')
 router.register(r'control/recargas', RecargaCombustibleViewSet, basename='recargas')
@@ -21,6 +25,19 @@ def inicio_api(request):
 urlpatterns = [
     path('', inicio_api),  # <-- Esta línea atenderá la ruta http://127.0.0.1:8000/
     path('admin/', admin.site.urls),
+  path('schema/', SpectacularAPIView.as_view(), name='schema'),
+
+    path(
+        'swagger/',
+        SpectacularSwaggerView.as_view(url_name='schema'),
+        name='swagger-ui'
+    ),
+
+    path(
+        'redoc/',
+        SpectacularRedocView.as_view(url_name='schema'),
+        name='redoc'
+    ),
     path('api/', include(router.urls)),
     path('api/usuarios/', include('usuarios.urls')),
     path('api/unidades/', include('unidades.urls')),

@@ -371,3 +371,6 @@ class ViajeSerializer(serializers.ModelSerializer):
 class ViajeDetalleSerializer(ViajeSerializer):
     """Serializer de viaje que incluye las cargas relacionadas."""
     cargas = CargaSerializer(source='carga_set', many=True, read_only=True)
+
+    class Meta(ViajeSerializer.Meta):
+        fields = ViajeSerializer.Meta.fields + ['cargas']
